@@ -16,4 +16,5 @@ Component|Language / framework
 Mobile App | [Cordova](https://cordova.apache.org/)
 Web App | Custom client-side JS ?
 Web Server | [Node.js](https://node.js)
+DBMS | MariaDB / PostgreSQL
 Email Server (SMTP) | ?
