@@ -8,3 +8,12 @@ Trello is used for planning, the link to the board is [here](https://trello.com/
 
 ### Mockups
 ![Whiteboard initial mockup for accountable2christ user interface](accountable2christ_mockups_1.jpg)
+
+### Languages and libraries
+
+Component|Language / framework
+---|---
+Mobile App | [Cordova](https://cordova.apache.org/)
+Web App | Custom client-side JS ?
+Web Server | [Node.js](https://node.js)
+Email Server (SMTP) | ?
