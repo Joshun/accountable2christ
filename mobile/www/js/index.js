@@ -34,13 +34,67 @@ var app = {
 
         rng = new RNG(new Date().getTime());
 
-        createIcon(summariseText("Anger Management"));
+        $("#test_cell_1").append(createIcon(summariseText("Relationship Issues")));
+        $("#test_cell_2").append(createIcon(summariseText("Anger Management")));
+
+
+        $("#login_form").submit(function() {
+            showMainScreen();
+            return false;
+        });
+
+        $("#add_new_struggle_scn_btn").on("click", function() {
+            showAddStruggleScreen();
+        });
+
+        $("#add_new_struggle_form").submit(function() {
+            showMainScreen();
+            return false;
+        });
+
+        $("#cancel_add_new_struggle_btn").on("click", function() {
+            showMainScreen();
+        });
+
+        $("#send-struggle-yes").on("click", function() {
+            showMainScreen();
+        });
+
+        $("#send-struggle-no").on("click", function() {
+            showMainScreen();
+        });
+
+        $("table tr").on("click", function() {
+            showSendStruggleScreen();
+        });
 
     }
 
 };
 
 app.initialize();
+
+function hideAll() {
+    $("#login_screen").addClass("hidden");
+    $("#main_screen").addClass("hidden");
+    $("#add_new_struggle_screen").addClass("hidden");
+    $("#send_struggle_screen").addClass("hidden");
+}
+
+function showMainScreen() {
+    hideAll();
+    $("#main_screen").removeClass("hidden");
+}
+
+function showAddStruggleScreen() {
+    hideAll();
+    $("#add_new_struggle_screen").removeClass("hidden");
+}
+
+function showSendStruggleScreen() {
+    hideAll();
+    $("#send_struggle_screen").removeClass("hidden");
+}
 
 function summariseText(text) {
     if (text == null || text == "") {
@@ -77,7 +131,9 @@ function createIcon(iconText) {
     iconDiv.css("background-color", colorPairs[randColorIndex][0]);
     iconTextSpan.css("color", colorPairs[randColorIndex][1]);
 
-    $("#test_cell").append(iconDiv);
+    return iconDiv;
+
+    // $("#test_cell").append(iconDiv);
 
     // console.log("created icon with iconText", iconText, "and bg color", colors[randColorIndex]);
 }

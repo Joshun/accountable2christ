@@ -26,13 +26,13 @@
         <title>Accountable2Christ</title>
     </head>
     <body class="container">
-        <div class="login_screen hidden">
+        <div id="login_screen">
             <div class="row">
                 <div class="col-xs-12">
                     <h1>Login</h1>
                 </div>
             </div>
-            <form action="">
+            <form id="login_form" action="">
                 <div class="row">
                     <div class="col-xs-12">
                         <input class="form-control" type="text" placeholder="peter@mail.com">
@@ -54,12 +54,13 @@
                 </div>
             </form>
         </div>
-        <div class="main_screen">
+        <div id="main_screen" class="hidden">
             <div class="row">
                 <div class="col-xs-12">
                     <h1>I am struggling with...</h1>
                 </div>
             </div>
+
             <div class="row">
                 <div class="col-xs-12">
                     <table class="table table-striped" id="struggles_table">
@@ -69,22 +70,90 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td class="icon-cell"><div class="icon"> R </div></td>
+                                <td id="test_cell_1" class="icon-cell"></td>
                                 <td class="desc-cell">Relationship issues</td>
                             </tr>
-                            <tr>
+                            <!--<tr>
                                 <td class="icon-cell"><div class="icon">A</div></td>
                                 <td class="desc-cell">Anger issues</td>
-                            </tr>
+                            </tr>-->
                             <tr>
-                                <td id="test_cell" class="icon-cell"></div>
-                                <td class="desc-cell">?</div>
+                                <td id="test_cell_2" class="icon-cell"></td>
+                                <td class="desc-cell">Anger Management</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
+
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="btn-group-justified" role="group">
+                        <div class="btn-group" role="group">
+                            <button class="btn btn-primary" id="add_new_struggle_scn_btn">ADD NEW</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
+
+        <div id="add_new_struggle_screen" class="hidden">
+            <form action="" id="add_new_struggle_form">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <h1>Add new struggle...</h1>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <input type="text" placeholder="e.g. addiction" class="form-control">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <textarea placeholder="This is worse for me when.." class="form-control"></textarea>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="btn-group-justified" role="group">
+                            <div class="btn-group" role="group">
+                                <input class="btn btn-primary" type="submit" value="ADD" id="add_new_struggle_btn">
+                            </div>
+                             <div class="btn-group" role="group">
+                                <button class="btn btn-primary" id="cancel_add_new_struggle_btn">CANCEL</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div id="send_struggle_screen" class="hidden">
+            <div class="row">
+                <div class="col-xs-12">
+                    <h1>Sending struggle to accountability partner...</h1>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <p>Are you sure?</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="btn-group-justified" role="group">
+                        <div class="btn-group" role="group">
+                            <button class="btn btn-danger" id="send-struggle-yes">YES</button>
+                        </div>
+                        <div class="btn-group" role="group">
+                            <button class="btn btn-primary" id="send-struggle-no">NO</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- library scripts -->
         <script type="text/javascript" src="cordova.js"></script>
         <script type="text/javascript" src="dist/jquery/js/jquery-1.11.1.min.js" id="cordova-jquery"></script>
