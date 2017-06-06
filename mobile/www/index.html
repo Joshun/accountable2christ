@@ -68,18 +68,16 @@
                             <th class="icon-cell"></th>
                             <th class="desc-cell"></th>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td id="test_cell_1" class="icon-cell"></td>
-                                <td class="desc-cell">Relationship issues</td>
-                            </tr>
-                            <!--<tr>
-                                <td class="icon-cell"><div class="icon">A</div></td>
-                                <td class="desc-cell">Anger issues</td>
-                            </tr>-->
-                            <tr>
-                                <td id="test_cell_2" class="icon-cell"></td>
-                                <td class="desc-cell">Anger Management</td>
+                        <tbody id="struggles_table_body">
+                            <!--<template id="struggles_table_body" v-for="struggle in struggles">
+                                <tr>
+                                    <td class="icon-cell">{{ struggle.icon }}</td>
+                                    <td class="desc-cell">{{ struggle.description }}</td>
+                                </tr>
+                            </template>-->
+                            <tr v-for="struggle in struggles">
+                                <td class="icon-cell" v-html="struggle.icon"></td>
+                                <td class="desc-cell">{{ struggle.description }}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -192,7 +190,7 @@
         <script type="text/javascript" src="dist/jquery/js/jquery-1.11.1.min.js" id="cordova-jquery"></script>
         <!--<script type="text/javascript" src="dist/jquery/js/jquery-1.5.0.mobile.min.js"></script>-->
         <script type="text/javascript" src="dist/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
-        <script type="text/javascript" src="dist/vue-2.3.3/vue.min.js"></script>
+        <script type="text/javascript" src="dist/vue-2.3.3/vue.js"></script>
 
         <!-- -->
         <!-- app scripts -->

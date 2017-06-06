@@ -34,8 +34,29 @@ var app = {
 
         rng = new RNG(new Date().getTime());
 
-        $("#test_cell_1").append(createIcon(summariseText("Relationship Issues")));
-        $("#test_cell_2").append(createIcon(summariseText("Anger Management")));
+        // $("#test_cell_1").append(createIcon(summariseText("Relationship Issues")));
+        // $("#test_cell_2").append(createIcon(summariseText("Anger Management")));
+
+        var values = [];
+        values.push({icon: createIcon(summariseText("Relationship Issues")), description: "Relationship Issues"});
+        values.push({icon: createIcon(summariseText("Anger Management")), description: "Anger Management"});
+
+        // var icons = [];
+        // icons.push(createIcon(summariseText("Relationship Issues")));
+        // icons.push(createIcon(summariseText("Anger Management")));
+
+        // var descriptions = [ "Relationship Issues", "Anger Management" ];
+
+        var vm = new Vue({
+            el: "#struggles_table_body",
+            data: {
+                struggles: values
+            }
+            // data: {
+            //     icons: icons,
+            //     descriptions: descriptions
+            // }
+        });
 
 
         $("#login_form").submit(function() {
@@ -131,7 +152,7 @@ function createIcon(iconText) {
     iconDiv.css("background-color", colorPairs[randColorIndex][0]);
     iconTextSpan.css("color", colorPairs[randColorIndex][1]);
 
-    return iconDiv;
+    return iconDiv.prop("outerHTML");
 
     // $("#test_cell").append(iconDiv);
 
