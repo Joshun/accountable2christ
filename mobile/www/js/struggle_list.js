@@ -2,11 +2,12 @@ var rng = new RNG(new Date().getTime());
 
 function StruggleList(struggles) {
     this.struggles = (struggles == null) ? {} : struggles;
+    this.usedColors = [];
 }
 
 StruggleList.prototype.add = function(text) {
     this.struggles[text] = {
-        icon: createIcon(summariseText(text)),
+        icon: createIcon(summariseText(text), this.usedColors),
         description: text
     };
 };
@@ -59,7 +60,7 @@ function summariseText(text) {
     }
 }
 
-function createIcon(iconText) {
+function createIcon(iconText, usedColors) {
     console.log(createIcon);
     var iconDiv = $("<div>");
     var iconTextSpan = $("<span>").text(iconText);
@@ -72,7 +73,13 @@ function createIcon(iconText) {
 
     // https://stackoverflow.com/questions/1527803/generating-random-whole-numbers-in-javascript-in-a-specific-range
     // var randColorIndex = Math.floor(Math.random() * (colors.length-1));
-    var randColorIndex = rng.nextRange(0, colorPairs.length);
+
+    var randColorIndex;
+    do {
+      randColorIndex = rng.nextRange(0, colorPairs.length);
+      console.log("err")
+    } while ($.inArray(randColorIndex, usedColors) != -1 || usedColors.length >= 5);
+    usedColors.push(randColorIndex);
 
     iconDiv.css("background-color", colorPairs[randColorIndex][0]);
     iconTextSpan.css("color", colorPairs[randColorIndex][1]);
