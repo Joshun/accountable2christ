@@ -1,8 +1,12 @@
 import db_schema
-from db_schema import User
+from db_schema import User, UserKey
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.state import InstanceState
 from copy import copy
+import bcrypt
+import os
+import binascii
+import arrow
 
 Session = sessionmaker(bind=db_schema.engine)
 
@@ -21,6 +25,13 @@ def sanitise_dict(d):
         del d[k]
     return d
 
+def register_user(username, password):
+    session = Session()
+    user = User(username=username, bcrypt_password=bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt()).decode("utf-8"))
+    print(user.bcrypt_password)
+    session.add(user)
+    session.commit()
+
 def get_users():
     session = Session()
     users = session.query(User).all()
@@ -38,3 +49,54 @@ def get_users():
 
 
     return users_list
+
+def authenticate_user(username, password):
+    session = Session()
+    user = session.query(User).filter(User.username == username).first()
+
+    if user is None or user.bcrypt_password is None:
+        return False
+    else:
+        return bcrypt.hashpw(password.encode("utf-8"), user.bcrypt_password.encode("utf-8")) == user.bcrypt_password.encode("utf-8")
+
+def create_user_key(username):
+    session = Session()
+    user = session.query(User).filter(User.username == username).first()
+
+    if user is None:
+        return None
+
+    else:
+        key = binascii.hexlify(os.urandom(24)).decode("utf-8")
+        expiry = arrow.utcnow().replace(days=40).datetime
+        user_key = UserKey(key=key, expiry=expiry, user=user)
+        session.add(user_key)
+        # user.user_keys.append(user_key)
+        session.commit()
+
+        return key
+
+
+def get_user_keys():
+    session = Session()
+    users = session.query(User).all()
+
+    users_list = []
+    for user in users:
+        user_keys = []
+        for key in user.user_keys:
+            user_keys.append(sanitise_dict(copy(key.__dict__)))
+        user_dict = sanitise_dict(copy(user.__dict__))
+        user_dict["user_keys"] = user_keys
+        
+        users_list.append(user_dict)
+    print(users_list)
+    return users_list
+
+def get_user_key(username, key):
+    session = Session()
+    # user = session.query(User).filter((User.username == username) & (User.user_keys.contains(key) )).first()
+    # key = session.query(UserKey).filter((UserKey.user.username == username) & (UserKey.key == key)).first()
+    key = session.query(UserKey).join(User).filter((User.username == username) & (UserKey.key == key)).first()
+    return key.key if key is not None else None
+    
