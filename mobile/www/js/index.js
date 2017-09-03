@@ -31,20 +31,23 @@ var app = {
     onDeviceReady: function() {
         console.log("init.");
 
-        var struggleList = new StruggleList();
-        struggleList.add("Anger Management");
-        struggleList.add("Relationship Issues");
 
+        // var values = struggleList.getList();
 
-        var values = struggleList.getList();
-      
         var vm = new Vue({
             el: "#struggles_table_body",
             data: {
-                struggles: values
+                struggles: []
             }
-           
-        });
+          });
+        var struggleList = new StruggleList(vm);
+
+
+        struggleList.add("Anger Management");
+        struggleList.add("Relationship Issues");
+
+        // vm.data.struggles = struggleList.getList();
+        // vm.struggles = struggleList.getList();
 
 
         $("#login_form").submit(function() {
@@ -57,6 +60,9 @@ var app = {
         });
 
         $("#add_new_struggle_form").submit(function() {
+            var newStruggleName = $("#new_struggle_name").val();
+            struggleList.add(newStruggleName);
+            console.log(struggleList.getList())
             showMainScreen();
             return false;
         });
@@ -104,4 +110,3 @@ function showSendStruggleScreen() {
     hideAll();
     $("#send_struggle_screen").removeClass("hidden");
 }
-

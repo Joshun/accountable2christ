@@ -1,3 +1,7 @@
-/mobile/platforms/
+/mobile/platforms/android
 /mobile/plugins/
 **/node_modules
+.vscode/
+*.bak
+venv/
+__pycache__/

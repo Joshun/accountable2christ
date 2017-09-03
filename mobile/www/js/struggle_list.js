@@ -1,8 +1,10 @@
 var rng = new RNG(new Date().getTime());
 
-function StruggleList(struggles) {
-    this.struggles = (struggles == null) ? {} : struggles;
+function StruggleList(vm) {
+    this.struggles = {}
+    // this.struggles = (struggles == null) ? {} : struggles;
     this.usedColors = [];
+    this.vm = vm;
 }
 
 StruggleList.prototype.add = function(text) {
@@ -10,12 +12,14 @@ StruggleList.prototype.add = function(text) {
         icon: createIcon(summariseText(text), this.usedColors),
         description: text
     };
+    this.vm.struggles = this.getList();
 };
 
 StruggleList.prototype.remove = function(text) {
     if (text in this.struggles) {
         delete this.struggles[text];
     }
+    this.vm.struggles = this.getList();
 };
 
 StruggleList.prototype.getList = function() {
