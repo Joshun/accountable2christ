@@ -93,10 +93,31 @@ def get_user_keys():
     print(users_list)
     return users_list
 
+def get_user_from_key(key):
+    session = Session()
+    db_key = session.query(UserKey).filter(UserKey.key == key).first()
+    if db_key is not None and db_key.user is not None:
+        db_user = db_key.user
+        return db_user.username
+    else:
+        return None
+
+
 def get_user_key(username, key):
     session = Session()
     # user = session.query(User).filter((User.username == username) & (User.user_keys.contains(key) )).first()
     # key = session.query(UserKey).filter((UserKey.user.username == username) & (UserKey.key == key)).first()
     key = session.query(UserKey).join(User).filter((User.username == username) & (UserKey.key == key)).first()
     return key.key if key is not None else None
-    
+
+def add_struggle(username, struggle_name, struggle_description):
+    session = Session()
+    struggle_user = session.query(User).filter(User.username == username).first()
+
+    if struggle_user is None:
+        return "err_invalid_user"
+    else:
+        struggle = db_schema.Struggle(name=struggle_name, description=struggle_description, user=struggle_user)
+        session.add(struggle)
+        session.commit()
+        return "ok"

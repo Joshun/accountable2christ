@@ -12,6 +12,24 @@ class MyJSONEncoder(json.JSONEncoder):
 
         return json.JSONEncoder.default(self, obj)
 
+class AuthHandler(tornado.web.RequestHandler):
+    def auth(self):
+        if "Session-Key" in self.request.headers:
+            key_header = self.request.headers["Session-Key"]
+            self.auth_user = db_query.get_user_from_key(key_header)
+        else:
+            self.auth_user = None
+        # print("key:", key_header, "user:", self.user)
+
+    # def get(self, *args, **kwargs):
+    #     super().get(args, kwargs)
+    #     self._auth()
+    
+    # def post(self, *args, **kwargs):
+    #     super().post(args, kwargs)
+    #     self._auth()
+
+
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
         self.write("This server is for making requests to the Accountable2Christ API")
@@ -63,15 +81,31 @@ class KeyCheckHandler(tornado.web.RequestHandler):
         user_key = db_query.get_user_key(username, key)
         self.write({"key": user_key})
 
+class AddStruggleHandler(AuthHandler):
+    def post(self):
+        self.auth()
+        struggle_name = self.get_body_argument("name")
+        struggle_description = self.get_body_argument("description")
+
+        add_strug_res = db_query.add_struggle(self.auth_user, struggle_name, struggle_description)
+        self.write({"operation_result": add_strug_res})
+
+
+class AuthCheckHandler(AuthHandler):
+    def get(self):
+        self.auth()
+        print(self.auth_user)
 
 def make_app():
     return tornado.web.Application([
         (r"/", MainHandler),
         (r"/users", UsersHandler),
         (r"/register", RegistrationHandler),
-        (r"/auth", LoginHandler),
+        (r"/login", LoginHandler),
         (r"/keys", KeyHandler),
         (r"/keyauth", KeyCheckHandler),
+        (r"/authcheck", AuthCheckHandler),
+        (r"/struggles/new", AddStruggleHandler),
     ],
     autoreload=True,
     debug=True
