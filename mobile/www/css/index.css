@@ -41,3 +41,9 @@
     width: 200px;
     height: 200px;
 }*/
+
+#user_header {
+    text-align: right;
+    margin-top: 10px;
+    margin-right: 10px;
+}

@@ -31,6 +31,14 @@ var app = {
     onDeviceReady: function() {
         console.log("init.");
 
+        // $.ajax({
+        //     "url": "http://10.0.2.2:8000/register",
+        //     "data": {
+        //         "username": "jmoey",
+        //         "password": "123"
+        //     }
+        // })
+
 
         // var values = struggleList.getList();
 
@@ -51,7 +59,8 @@ var app = {
 
 
         $("#login_form").submit(function() {
-            showMainScreen();
+            // showMainScreen();
+            API.register($("#login_user").val(), $("#login_password").val(), showMainScreen);
             return false;
         });
 
@@ -61,9 +70,15 @@ var app = {
 
         $("#add_new_struggle_form").submit(function() {
             var newStruggleName = $("#new_struggle_name").val();
+            var newStruggleDesc = $("#new_struggle_desc").val();
             struggleList.add(newStruggleName);
             console.log(struggleList.getList())
-            showMainScreen();
+            API.addStruggle(
+                { "name": newStruggleName, "description": newStruggleDesc },
+                window.localStorage.getItem("session_key"),
+                showMainScreen
+            );
+            // showMainScreen();
             return false;
         });
 
@@ -96,7 +111,19 @@ function hideAll() {
     $("#send_struggle_screen").addClass("hidden");
 }
 
-function showMainScreen() {
+function login(api_result) {
+    
+}
+
+function showMainScreen(api_result) {
+    // window.localStorage.setItem()
+    // var sessionKey = window.localStorage.getItem("session_key");
+    // if (sessionKey == null) {
+    //     API.login()
+    // }
+    window.localStorage.setItem("session_key", api_result);
+    $("#user_header").text("Welcome, " + $("#login_user").val());
+
     hideAll();
     $("#main_screen").removeClass("hidden");
 }

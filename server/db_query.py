@@ -1,5 +1,5 @@
 import db_schema
-from db_schema import User, UserKey
+from db_schema import User, UserKey, Struggle, StruggleEvent
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.state import InstanceState
 from copy import copy
@@ -32,6 +32,8 @@ def register_user(username, password):
     session.add(user)
     session.commit()
 
+    return create_user_key(username)
+
 def get_users():
     session = Session()
     users = session.query(User).all()
@@ -49,6 +51,26 @@ def get_users():
 
 
     return users_list
+
+def get_struggles(username):
+    session = Session()
+    user = session.query(User).filter(User.username == username).first()
+    if user is not None:
+        struggles = user.struggles
+        struggle_list = []
+        for s in struggles:
+            struggle_events_list = []
+            for e in s.struggle_events:
+                struggle_events_list.append(sanitise_dict(e.__dict__))
+            
+            struggle_dict = sanitise_dict(s.__dict__)
+            struggle_dict["events"] = struggle_events_list
+            struggle_list.append(struggle_dict)
+        return struggle_list
+
+    else:
+        return None
+
 
 def authenticate_user(username, password):
     session = Session()
@@ -117,7 +139,27 @@ def add_struggle(username, struggle_name, struggle_description):
     if struggle_user is None:
         return "err_invalid_user"
     else:
-        struggle = db_schema.Struggle(name=struggle_name, description=struggle_description, user=struggle_user)
+        struggle = Struggle(name=struggle_name, description=struggle_description, user=struggle_user)
         session.add(struggle)
         session.commit()
         return "ok"
+
+def add_struggle_event(username, struggle_id, timestamp, description):
+    session = Session()
+
+    user = session.query(User).filter(User.name == username).first()
+    if user is None:
+        return "err_invalid_user"
+
+    struggle = session.query(Struggle).filter(
+        (Struggle.id == struggle_id)
+        & (Struggle.user == user)).first()
+
+    if struggle is None:
+        return "err_invalid_struggle"
+
+    formatted_ts = arrow.get(timestamp).datetime
+    struggle_event = StruggleEvent(timestamp=formatted_ts, description=description, struggle=struggle)
+
+    session.add(struggle_event)
+    session.commit()

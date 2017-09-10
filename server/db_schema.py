@@ -22,6 +22,7 @@ class StruggleEvent(Base):
     __tablename__ = "struggle_events"
     id = Column(Integer, primary_key=True)
     timestamp = Column(DateTime)
+    description = Column(String(45))
     struggles_id = Column(ForeignKey("struggles.id"))
 
     struggle = relationship("Struggle", back_populates="struggle_events")

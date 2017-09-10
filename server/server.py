@@ -55,8 +55,8 @@ class RegistrationHandler(tornado.web.RequestHandler):
         print("Received username =", username, "password =", password)
 
         if username is not None and password is not None:
-            db_query.register_user(username, password)
-            self.write("OK")
+            key = db_query.register_user(username, password)
+            self.write(key)
         else:
             self.write("ERR")
         self.finish()
@@ -90,11 +90,27 @@ class AddStruggleHandler(AuthHandler):
         add_strug_res = db_query.add_struggle(self.auth_user, struggle_name, struggle_description)
         self.write({"operation_result": add_strug_res})
 
+class AddStruggleEventHandler(AuthHandler):
+    def post(self, struggle_id):
+        self.auth()
+        strug_event_timestamp = self.get_body_argument("timestamp")
+        strug_event_desc = self.get_body_argument("description")
+        add_strug_event_res = db_query.add_struggle_event(self.auth_user, struggle_id, strug_event_timestamp, strug_event_desc)
+        self.write({"operation_result": add_strug_event_res})
 
 class AuthCheckHandler(AuthHandler):
     def get(self):
         self.auth()
         print(self.auth_user)
+
+class GetStrugglesHandler(AuthHandler):
+    def get(self):
+        self.auth()
+        struggle_list = db_query.get_struggles(self.auth_user)
+        if struggle_list is not None:
+            self.write({"struggle_list": struggle_list})
+        else:
+            self.write("ERR")
 
 def make_app():
     return tornado.web.Application([
@@ -105,7 +121,9 @@ def make_app():
         (r"/keys", KeyHandler),
         (r"/keyauth", KeyCheckHandler),
         (r"/authcheck", AuthCheckHandler),
+        (r"/struggles", GetStrugglesHandler),
         (r"/struggles/new", AddStruggleHandler),
+        (r"/struggles/([0-9]+)/new_event", AddStruggleEventHandler),
     ],
     autoreload=True,
     debug=True
