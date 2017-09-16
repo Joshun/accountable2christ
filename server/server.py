@@ -108,7 +108,11 @@ class GetStrugglesHandler(AuthHandler):
         self.auth()
         struggle_list = db_query.get_struggles(self.auth_user)
         if struggle_list is not None:
-            self.write({"struggle_list": struggle_list})
+            struggles_name_desc_dict = {}
+            for s in struggle_list:
+                struggles_name_desc_dict[s["name"]] = struggles_name_desc_dict[s["description"]]
+            
+            self.write(struggles_name_desc_dict);
         else:
             self.write("ERR")
 

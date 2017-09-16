@@ -41,6 +41,16 @@
             </div>
             <form id="login_form" action="">
                 <div class="row">
+                    <div class="btn-group-justified" data-toggle="buttons">
+                        <label class="btn btn-primary active" id="register_radio_lbl">
+                            <input type="radio" id="register_radio" autocomplete="off" checked> Registration
+                        </label>
+                        <label class="btn btn-primary" id="login_radio_lbl">
+                            <input type="radio" id="login_radio" autocomplete="off"> Login
+                        </label>
+                    </div>
+                </div>
+                <div class="row">
                     <div class="col-xs-12">
                         <input id="login_user" class="form-control" type="text" placeholder="peter@mail.com">
                     </div>
@@ -48,6 +58,11 @@
                 <div class="row">
                     <div class="col-xs-12">
                         <input id="login_password" class="form-control" type="password" placeholder="******">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <input id="login_password_confirm" class="form-control" type="password" placeholder="******">
                     </div>
                 </div>
                 <div class="row">

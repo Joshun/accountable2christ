@@ -51,16 +51,36 @@ var app = {
         var struggleList = new StruggleList(vm);
 
 
-        struggleList.add("Anger Management");
-        struggleList.add("Relationship Issues");
+        // struggleList.add("Anger Management");
+        // struggleList.add("Relationship Issues");
 
         // vm.data.struggles = struggleList.getList();
         // vm.struggles = struggleList.getList();
 
+        $("#login_radio_lbl").click(function() {
+            $("#login_password_confirm").addClass("hidden");
+            console.log($("#login_radio:checked").val());
+            console.log($("#register_radio:checked").val());
+        });
+
+        $("#register_radio_lbl").click(function() {
+            $("#login_password_confirm").removeClass("hidden");
+            console.log($("#login_radio:checked").val());
+            console.log($("#register_radio:checked").val());
+        })
+       
 
         $("#login_form").submit(function() {
             // showMainScreen();
-            API.register($("#login_user").val(), $("#login_password").val(), showMainScreen);
+            if ($("#register_radio:checked").val() != null) {
+                console.log("registering user...");
+                API.register($("#login_user").val(), $("#login_password").val(), showMainScreen);                
+            }
+            else {
+                console.log("logging in...");
+                API.login($("#login_user").val(), $("#login_password").val(), showMainScreen);
+            }
+
             return false;
         });
 
@@ -124,8 +144,10 @@ function showMainScreen(api_result) {
     window.localStorage.setItem("session_key", api_result);
     $("#user_header").text("Welcome, " + $("#login_user").val());
 
-    hideAll();
-    $("#main_screen").removeClass("hidden");
+    API.loadStruggles(api_result, function(res) {
+        hideAll();        
+        $("#main_screen").removeClass("hidden");
+    });
 }
 
 function showAddStruggleScreen() {

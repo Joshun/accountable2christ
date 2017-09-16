@@ -15,6 +15,11 @@ StruggleList.prototype.add = function(text) {
     this.vm.struggles = this.getList();
 };
 
+StruggleList.prototype.setList = function(l) {
+    this.struggles = l;
+    this.vm.struggles = this.getList();
+}
+
 StruggleList.prototype.remove = function(text) {
     if (text in this.struggles) {
         delete this.struggles[text];
