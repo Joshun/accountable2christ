@@ -22,7 +22,9 @@ var app = {
 
     session: {
         "username": null,
-        "session_key": null
+        "session_key": null,
+        "vm": null,
+        "struggle_list": null
     },
 
 
@@ -38,6 +40,14 @@ var app = {
     onDeviceReady: function() {
         console.log("init.");
 
+        app.session.vm = new Vue({
+            el: "#struggles_table_body",
+            data: {
+                struggles: []
+            }
+          });
+        app.session.struggle_list = new StruggleList(app.session.vm);
+
         // $.ajax({
         //     "url": "http://10.0.2.2:8000/register",
         //     "data": {
@@ -49,13 +59,7 @@ var app = {
 
         // var values = struggleList.getList();
 
-        var vm = new Vue({
-            el: "#struggles_table_body",
-            data: {
-                struggles: []
-            }
-          });
-        var struggleList = new StruggleList(vm);
+       
 
 
         // struggleList.add("Anger Management");
@@ -99,11 +103,10 @@ var app = {
         $("#add_new_struggle_form").submit(function() {
             var newStruggleName = $("#new_struggle_name").val();
             var newStruggleDesc = $("#new_struggle_desc").val();
-            struggleList.add(newStruggleName);
-            console.log(struggleList.getList())
+            // sessionKey.struggle_list.add(newStruggleName);
             API.addStruggle(
                 { "name": newStruggleName, "description": newStruggleDesc },
-                window.localStorage.getItem("session_key"),
+                app.session.session_key,
                 showMainScreen
             );
             // showMainScreen();
@@ -161,6 +164,12 @@ function showMainScreen() {
     $("#user_header").text("Welcome, " + app.session.username);
 
     API.loadStruggles(app.session.session_key, function(res) {
+        console.log("loadStruggles:", res)
+        // app.session.struggle_list.setList(res);
+        app.session.struggle_list.clearAll();
+        for (var k in res) {
+            app.session.struggle_list.add(k, res[k]);
+        }
         hideAll();        
         $("#main_screen").removeClass("hidden");
     });

@@ -7,17 +7,24 @@ function StruggleList(vm) {
     this.vm = vm;
 }
 
-StruggleList.prototype.add = function(text) {
-    this.struggles[text] = {
-        icon: createIcon(summariseText(text), this.usedColors),
-        description: text
+StruggleList.prototype.add = function(name, description) {
+    this.struggles[name] = {
+        icon: createIcon(summariseText(name), this.usedColors),
+        name: name,
+        description: description
     };
     this.vm.struggles = this.getList();
 };
 
+StruggleList.prototype.clearAll = function() {
+    this.struggles = {};
+    this.vm.struggles = this.getList();
+}
+
 StruggleList.prototype.setList = function(l) {
     this.struggles = l;
     this.vm.struggles = this.getList();
+    // this.add("testing")
 }
 
 StruggleList.prototype.remove = function(text) {
