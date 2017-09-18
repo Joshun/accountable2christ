@@ -143,6 +143,7 @@ var app = {
 app.initialize();
 
 function hideAll() {
+    clearError();
     $("#login_screen").addClass("hidden");
     $("#main_screen").addClass("hidden");
     $("#add_new_struggle_screen").addClass("hidden");
@@ -179,6 +180,7 @@ function loggedIn(api_result) {
     console.log("loggedIn");
     console.log(api_result);
     if (api_result["result"] == "failure") {
+        writeError("Login or register Failed!");
         loginFailed();
     }
     else {
@@ -201,4 +203,14 @@ function showAddStruggleScreen() {
 function showSendStruggleScreen() {
     hideAll();
     $("#send_struggle_screen").removeClass("hidden");
+}
+
+function writeError(msg) {
+    console.log("writeError:", msg);
+    $("#error_box").text(msg);
+}
+
+function clearError() {
+    console.log("clearError")
+    $("#error_box").text("");
 }

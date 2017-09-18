@@ -47,3 +47,11 @@
     margin-top: 10px;
     margin-right: 10px;
 }
+
+#error_box {
+    background-color: #7f0707;
+    color: #FFF;
+    text-align: center;
+    font-size: 1em;
+    margin-top: 10px;
+}

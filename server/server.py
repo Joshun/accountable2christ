@@ -86,8 +86,10 @@ class AddStruggleHandler(AuthHandler):
         self.auth()
         struggle_name = self.get_body_argument("name")
         struggle_description = self.get_body_argument("description")
-
-        add_strug_res = db_query.add_struggle(self.auth_user, struggle_name, struggle_description)
+        if struggle_name is None:
+            add_strug_res = "failed"
+        else:
+            add_strug_res = db_query.add_struggle(self.auth_user, struggle_name, struggle_description)
         self.write({"operation_result": add_strug_res})
 
 class AddStruggleEventHandler(AuthHandler):
@@ -115,7 +117,7 @@ class GetStrugglesHandler(AuthHandler):
         if struggle_list is not None:
             struggles_name_desc_dict = {}
             for s in struggle_list:
-                struggles_name_desc_dict[s["name"]] = struggles_name_desc_dict[s["description"]]
+                struggles_name_desc_dict[s["name"]] = s["description"]
             
             self.write(struggles_name_desc_dict);
         else:
