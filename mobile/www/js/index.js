@@ -79,7 +79,8 @@ var app = {
 
         $("#login_form").submit(function() {
             // showMainScreen();
-            if ($("#register_radio:checked").val() != null) {
+            // if ($("#register_radio:checked").val() != null) {
+            if ($("#register_radio").is(":checked")) {
                 console.log("registering user...");
                 API.register($("#login_user").val(), $("#login_password").val(), loggedIn);                
             }
