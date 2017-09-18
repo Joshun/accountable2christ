@@ -42,9 +42,9 @@ class LoginHandler(tornado.web.RequestHandler):
         res = db_query.authenticate_user(username, password)
         if res:
             key = db_query.create_user_key(username)
-            self.write(key)
+            self.write({"user": username, "key": key, "result": "success"})
         else:
-            self.write("ERR")
+            self.write({"result": "failure"})
         # self.write(str(res))
         self.finish()
 
@@ -56,9 +56,9 @@ class RegistrationHandler(tornado.web.RequestHandler):
 
         if username is not None and password is not None:
             key = db_query.register_user(username, password)
-            self.write(key)
+            self.write({"user": username, "key": key, "result": "success"})
         else:
-            self.write("ERR")
+            self.write({"result": "failure"})
         self.finish()
 
 
@@ -101,7 +101,12 @@ class AddStruggleEventHandler(AuthHandler):
 class AuthCheckHandler(AuthHandler):
     def get(self):
         self.auth()
-        print(self.auth_user)
+        # print(self.auth_user)
+        if "Session-Key" in self.request.headers and self.auth_user is not None:
+            key_header = self.request.headers["Session-Key"]
+            self.write({"user": self.auth_user, "key": key_header, "result": "success"})
+        else:
+            self.write({"result": "failure"})
 
 class GetStrugglesHandler(AuthHandler):
     def get(self):

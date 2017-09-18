@@ -19,6 +19,13 @@
 
 
 var app = {
+
+    session: {
+        "username": null,
+        "session_key": null
+    },
+
+
     // Application Constructor
     initialize: function() {
         document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
@@ -74,11 +81,11 @@ var app = {
             // showMainScreen();
             if ($("#register_radio:checked").val() != null) {
                 console.log("registering user...");
-                API.register($("#login_user").val(), $("#login_password").val(), showMainScreen);                
+                API.register($("#login_user").val(), $("#login_password").val(), loggedIn);                
             }
             else {
                 console.log("logging in...");
-                API.login($("#login_user").val(), $("#login_password").val(), showMainScreen);
+                API.login($("#login_user").val(), $("#login_password").val(), loggedIn);
             }
 
             return false;
@@ -118,8 +125,18 @@ var app = {
             showSendStruggleScreen();
         });
 
-    }
+        var sessionKey = window.localStorage.getItem("session_key");
+        console.log("key:");
+        console.log(sessionKey);
+        if (sessionKey != null) {
+            API.authCheck(sessionKey, function(result) {
+                
+                loggedIn(result);
+            });
+        }
+    
 
+    }
 };
 
 app.initialize();
@@ -135,19 +152,44 @@ function login(api_result) {
     
 }
 
-function showMainScreen(api_result) {
-    // window.localStorage.setItem()
-    // var sessionKey = window.localStorage.getItem("session_key");
-    // if (sessionKey == null) {
-    //     API.login()
-    // }
-    window.localStorage.setItem("session_key", api_result);
-    $("#user_header").text("Welcome, " + $("#login_user").val());
+function showMainScreen() {
+    // window.localStorage.setItem("session_key", api_result);
+    // console.log("result:");
+    // console.log(api_result);
+    $("#user_header").text("Welcome, " + app.session.username);
 
-    API.loadStruggles(api_result, function(res) {
+    API.loadStruggles(app.session.session_key, function(res) {
         hideAll();        
         $("#main_screen").removeClass("hidden");
     });
+}
+
+// function showMainScreen(api_result) {
+//     window.localStorage.setItem("session_key", api_result);
+//     $("#user_header").text("Welcome, " + $("#login_user").val());
+
+//     API.loadStruggles(api_result, function(res) {
+//         hideAll();        
+//         $("#main_screen").removeClass("hidden");
+//     });
+// }
+
+function loggedIn(api_result) {
+    console.log("loggedIn");
+    console.log(api_result);
+    if (api_result["result"] == "failure") {
+        loginFailed();
+    }
+    else {
+        window.localStorage.setItem("session_key", api_result["key"]);
+        app.session.username = api_result["user"];
+        app.session.session_key = api_result["key"];
+        showMainScreen();
+    }
+}
+
+function loginFailed() {
+    console.log("error logging in");
 }
 
 function showAddStruggleScreen() {

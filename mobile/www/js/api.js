@@ -63,3 +63,15 @@ API.login = function(username, password, callback) {
     })
 }
 
+API.authCheck = function(api_key, callback) {
+    $.ajax({
+        "url": "http://10.0.2.2:8000/authcheck",
+        "method": "GET",
+        "headers": {
+            "Session-Key": api_key
+        },
+        "success": function(result) {
+            callback(result);
+        }
+    })
+}
