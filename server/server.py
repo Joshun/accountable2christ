@@ -54,7 +54,7 @@ class RegistrationHandler(tornado.web.RequestHandler):
         password = self.get_body_argument("password", default=None)
         print("Received username =", username, "password =", password)
 
-        if username is not None and password is not None:
+        if username is not None and password is not None and not db_query.user_exists(username):
             key = db_query.register_user(username, password)
             self.write({"user": username, "key": key, "result": "success"})
         else:

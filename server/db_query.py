@@ -34,6 +34,11 @@ def register_user(username, password):
 
     return create_user_key(username)
 
+def user_exists(user):
+    session = Session()
+    user = session.query(User).filter(User.username == user).first()
+    return user is not None
+
 def get_users():
     session = Session()
     users = session.query(User).all()
