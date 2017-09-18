@@ -158,6 +158,7 @@ function login(api_result) {
 }
 
 function showMainScreen() {
+    console.log("showMainScreen");
     // window.localStorage.setItem("session_key", api_result);
     // console.log("result:");
     // console.log(api_result);

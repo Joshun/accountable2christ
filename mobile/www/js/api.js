@@ -1,11 +1,16 @@
 
 function API() {
+    
+};
 
-}
+API.host = "10.0.2.2";
+API.port = "8000";
+API.url = "http://" + API.host + ":" + API.port;
+console.log(API.url)
 
 API.register = function(username, password, callback) {
     $.ajax({
-        "url": "http://10.0.2.2:8000/register",
+        "url": API.url + "/register",
         "method": "POST",
         "data": {
             "username": username,
@@ -14,13 +19,13 @@ API.register = function(username, password, callback) {
         "success": function(result) {
             callback(result);
         }
-    })
-}
+    });
+};
 
 API.addStruggle = function(struggle, api_key, callback) {
     print(api_key);
     $.ajax({
-        "url": "http://10.0.2.2:8000/struggles/new",
+        "url": API.url + "/struggles/new",
         "method": "POST",
         "data": {
             "name": struggle["name"],
@@ -32,13 +37,13 @@ API.addStruggle = function(struggle, api_key, callback) {
         "success": function(result) {
             callback(result);
         }
-    })
-}
+    });
+};
 
 API.loadStruggles = function(api_key, callback) {
     print(api_key);
     $.ajax({
-        "url": "http://10.0.2.2:8000/struggles",
+        "url": API.url + "/struggles",
         "method": "GET",
         "headers": {
             "Session-Key": api_key
@@ -46,12 +51,12 @@ API.loadStruggles = function(api_key, callback) {
         "success": function(result) {
             callback(result);
         }
-    })
-}
+    });
+};
 
 API.login = function(username, password, callback) {
     $.ajax({
-        "url": "http://10.0.2.2:8000/login",
+        "url": API.url + "/login",
         "method": "POST",
         "data": {
             "username": username,
@@ -60,12 +65,12 @@ API.login = function(username, password, callback) {
         "success": function(result) {
             callback(result);
         }
-    })
-}
+    });
+};
 
 API.authCheck = function(api_key, callback) {
     $.ajax({
-        "url": "http://10.0.2.2:8000/authcheck",
+        "url": API.url + "/authcheck",
         "method": "GET",
         "headers": {
             "Session-Key": api_key
@@ -73,5 +78,5 @@ API.authCheck = function(api_key, callback) {
         "success": function(result) {
             callback(result);
         }
-    })
-}
+    });
+};
