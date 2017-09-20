@@ -111,7 +111,21 @@ var app = {
             // if ($("#register_radio:checked").val() != null) {
             if ($("#register_radio").is(":checked")) {
                 console.log("registering user...");
-                API.register($("#login_user").val(), $("#login_password").val(), loggedIn);                
+                var password = $("#login_password").val();
+                var confirmPassword = $("#login_password_confirm").val();
+                if (password.length < 6) {
+                    console.log("password too small");
+                    writeError("Password must be 6 or more chars!");
+                }
+                else if (password != confirmPassword) {
+                    console.log("password match failed")
+                    writeError("Passwords do not match!");
+                }
+                else {
+                    console.log("password match")
+                    API.register($("#login_user").val(), $("#login_password").val(), loggedIn);                                 
+                }
+
             }
             else {
                 console.log("logging in...");
