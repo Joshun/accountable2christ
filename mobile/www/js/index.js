@@ -129,7 +129,10 @@ var app = {
             var newStruggleName = $("#new_struggle_name").val();
             var newStruggleDesc = $("#new_struggle_desc").val();
             // sessionKey.struggle_list.add(newStruggleName);
-            if (app.session.struggle_list.contains(newStruggleName)) {
+            if (newStruggleName.length == 0) {
+                alert("Struggle must have a name!!!");
+            }
+            else if (app.session.struggle_list.contains(newStruggleName)) {
                 alert(newStruggleName + " already exists!!!");
             }
             else {
