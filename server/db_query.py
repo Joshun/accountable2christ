@@ -58,8 +58,10 @@ def get_users():
     return users_list
 
 def get_struggles(username):
+    print("username:", username)
     session = Session()
     user = session.query(User).filter(User.username == username).first()
+    print("user:", user)
     if user is not None:
         struggles = user.struggles
         struggle_list = []

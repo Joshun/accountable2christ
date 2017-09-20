@@ -5,12 +5,14 @@ from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
 
-engine = create_engine('sqlite:///:memory:', echo=True)
+# engine = create_engine('sqlite:///:memory:', echo=True)
+engine = create_engine('mysql+pymysql://a2c:john15@localhost/a2c_dev', echo=True, pool_recycle=50)
+
 
 class UserKey(Base):
     __tablename__ = "user_keys"
     id = Column(Integer, primary_key=True)
-    key = Column(String(45))
+    key = Column(String(255))
     expiry = Column(DateTime)
     users_id = Column(ForeignKey("users.id"))
 
@@ -51,13 +53,13 @@ Base.metadata.create_all(engine)
 
 Session = sessionmaker(bind=engine)
 session = Session()
-user1 = User(username="User1", bcrypt_password="changeme")
+# user1 = User(username="User1", bcrypt_password="changeme")
 
-struggle = Struggle()
+# struggle = Struggle()
 
-user1.struggles.append(struggle)
+# user1.struggles.append(struggle)
 # struggle.user = user1
 
-session.add(user1)
-session.add(struggle)
-session.commit()
+# session.add(user1)
+# session.add(struggle)
+# session.commit()
