@@ -3,8 +3,8 @@ function API() {
     
 };
 
-API.host = "10.0.2.2";
-// API.host = "jmoey.com";
+// API.host = "10.0.2.2";
+API.host = "jmoey.com";
 API.port = "8000";
 API.url = "http://" + API.host + ":" + API.port;
 console.log(API.url)
