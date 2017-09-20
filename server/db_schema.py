@@ -1,12 +1,12 @@
 import sqlalchemy
-from sqlalchemy import Column, ForeignKey, Integer, String, DateTime, create_engine
+from sqlalchemy import Column, ForeignKey, Integer, String, DateTime, Boolean, create_engine
 from sqlalchemy.orm import relationship, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
 
-# engine = create_engine('sqlite:///:memory:', echo=True)
-engine = create_engine('mysql+pymysql://a2c:john15@localhost/a2c_dev', echo=True, pool_recycle=50)
+engine = create_engine('sqlite:///:memory:', echo=True)
+# engine = create_engine('mysql+pymysql://a2c:john15@localhost/a2c_dev', echo=True, pool_recycle=50)
 
 
 class UserKey(Base):
@@ -48,6 +48,15 @@ class User(Base):
     struggles = relationship("Struggle", back_populates="user")
     user_keys = relationship("UserKey", back_populates="user")
 
+class UserAccountabilityPartnerRelation(Base):
+    __tablename__ = "accountability_partner_relations"
+    id = Column(Integer, primary_key=True)
+    initiator_user_id = Column(Integer, ForeignKey("users.id"))
+    responder_user_id = Column(Integer, ForeignKey("users.id"))
+    confirmed = Column(Boolean, default=False)    
+    initiator_user = relationship("User", foreign_keys=[initiator_user_id])
+    responder_user = relationship("User", foreign_keys=[responder_user_id])
+    # bool for whether request has been accepted
 
 Base.metadata.create_all(engine)
 

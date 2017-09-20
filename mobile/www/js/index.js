@@ -137,6 +137,15 @@ var app = {
             return false;
         });
 
+        $("#add_accountability_partner_form").submit(function() {
+            API.sendAccountabilityPartnerRequest($("#add_acc_partner_username").val(), app.session.session_key, function(result) {
+                alert("Request sent.");
+                showMainScreen();
+            });
+
+            return false;
+        });
+
         $("#add_new_struggle_scn_btn").on("click", function() {
             showAddStruggleScreen();
         });
@@ -182,6 +191,14 @@ var app = {
             showMainScreen();
         });
 
+        $("#add_acc_partner_back").on("click", function() {
+            showMainScreen();
+        });
+
+        $("#add_new_acc_partner_scn").on("click", function() {
+            showAddAccountabilityPartnerScreen();
+        });
+
         // $("table tr").on("click", function() {
         //     showSendStruggleScreen();
         // });
@@ -215,6 +232,7 @@ function hideAll() {
     $("#add_new_struggle_screen").addClass("hidden");
     $("#send_struggle_screen").addClass("hidden");
     $("#manage_struggles_screen").addClass("hidden");
+    $("#add_accountability_partner_screen").addClass("hidden");
 }
 
 function login(api_result) {
@@ -301,6 +319,11 @@ function showManageStrugglesScreen() {
 function showSendStruggleScreen() {
     hideAll();
     $("#send_struggle_screen").removeClass("hidden");
+}
+
+function showAddAccountabilityPartnerScreen() {
+    hideAll();
+    $("#add_accountability_partner_screen").removeClass("hidden");
 }
 
 function writeError(msg) {

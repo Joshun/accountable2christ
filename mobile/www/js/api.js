@@ -3,8 +3,8 @@ function API() {
     
 };
 
-// API.host = "10.0.2.2";
-API.host = "jmoey.com";
+API.host = "10.0.2.2";
+// API.host = "jmoey.com";
 API.port = "8000";
 API.url = "http://" + API.host + ":" + API.port;
 console.log(API.url)
@@ -105,6 +105,22 @@ API.addStruggleEvent = function(struggle_name, api_key, callback) {
         },
         "data": {
             "timestamp": new Date().toISOString()
+        },
+        "success": function(result) {
+            callback(result);
+        }
+    })
+}
+
+API.sendAccountabilityPartnerRequest = function(partner_name, api_key, callback) {
+    $.ajax({
+        "url": API.url + "/partners/new",
+        "method": "POST",
+        "headers": {
+            "Session-Key": api_key
+        },
+        "data": {
+            "accountability_partner_username": partner_name
         },
         "success": function(result) {
             callback(result);

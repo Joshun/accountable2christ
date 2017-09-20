@@ -1,5 +1,6 @@
 import db_schema
-from db_schema import User, UserKey, Struggle, StruggleEvent
+from db_schema import User, UserKey, Struggle, StruggleEvent, UserAccountabilityPartnerRelation
+# from db_schema import User, UserKey, Struggle, StruggleEvent
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.state import InstanceState
 from copy import copy
@@ -187,3 +188,17 @@ def remove_struggle(username, struggle_name):
         if struggle is not None:
             session.delete(struggle)
             session.commit()
+
+
+def add_accountability_partner(username, partner_username):
+    print(username, partner_username)
+    session = Session()
+    user = session.query(User).filter(User.username == username).first()
+    acc_user = session.query(User).filter(User.username == partner_username).first()
+    if user is None or acc_user is None:
+        return None
+    else:
+        user_acc_relation = UserAccountabilityPartnerRelation(initiator_user=user, responder_user=acc_user, confirmed=False)
+        session.add(user_acc_relation)
+        session.commit()
+        return True

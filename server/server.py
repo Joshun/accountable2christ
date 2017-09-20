@@ -128,6 +128,28 @@ class GetStrugglesHandler(AuthHandler):
         else:
             self.write("ERR")
 
+class AddAccountabilityPartnerHandler(AuthHandler):
+    def post(self):
+        self.auth()
+        if self.auth_user is None:
+            self.write("ERR")
+        accountability_partner = self.get_body_argument("accountability_partner_username", default=None)
+        if accountability_partner is None:
+            self.write("ERR")
+        else:
+            res = db_query.add_accountability_partner(self.auth_user, accountability_partner)
+
+            self.write({"result": res})
+
+
+class GetAccountabilityPartnersHandler(AuthHandler):
+    def get(self):
+        self.auth()
+
+class ViewAccountabilityPartnerHandler(AuthHandler):
+    def get(self, accountability_partner):
+        self.auth()
+
 def make_app():
     return tornado.web.Application([
         (r"/", MainHandler),
@@ -141,6 +163,9 @@ def make_app():
         (r"/struggles/new", AddStruggleHandler),
         (r"/struggles/([0-9a-zA-Z]+)", ManageStruggleHandler),
         (r"/struggles/([0-9a-zA-Z]+)/new_event", AddStruggleEventHandler),
+        (r"/partners/new", AddAccountabilityPartnerHandler),
+        (r"/partners", GetAccountabilityPartnersHandler),
+        (r"/partners/([0-9a-zA-Z]+)", ViewAccountabilityPartnerHandler),
     ],
     autoreload=True,
     debug=True
