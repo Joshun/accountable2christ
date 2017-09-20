@@ -16,6 +16,15 @@ StruggleList.prototype.add = function(name, description) {
     this.vm.struggles = this.getList();
 };
 
+StruggleList.prototype.contains = function(name) {
+    for (var k in this.struggles) {
+        if (k == name) {
+            return true;
+        }
+    }
+    return false;
+}
+
 StruggleList.prototype.clearAll = function() {
     this.struggles = {};
     this.vm.struggles = this.getList();
@@ -91,10 +100,12 @@ function createIcon(iconText, usedColors) {
     // var randColorIndex = Math.floor(Math.random() * (colors.length-1));
 
     var randColorIndex;
+    tries = 0;
     do {
       randColorIndex = rng.nextRange(0, colorPairs.length);
       console.log("err")
-    } while ($.inArray(randColorIndex, usedColors) != -1 || usedColors.length >= 5);
+      tries++;
+    } while (($.inArray(randColorIndex, usedColors) != -1 || usedColors.length >= 5) && tries < 5);
     usedColors.push(randColorIndex);
 
     iconDiv.css("background-color", colorPairs[randColorIndex][0]);

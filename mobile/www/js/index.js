@@ -44,6 +44,11 @@ var app = {
             el: "#struggles_table_body",
             data: {
                 struggles: []
+            },
+            methods: {
+                onClick: function(struggle_name) {
+                    alert(struggle_name);
+                }
             }
           });
         app.session.struggle_list = new StruggleList(app.session.vm);
@@ -67,6 +72,8 @@ var app = {
 
         // vm.data.struggles = struggleList.getList();
         // vm.struggles = struggleList.getList();
+
+        $("#logout_btn").click(logout);
 
         $("#login_radio_lbl").click(function() {
             $("#login_password_confirm").addClass("hidden");
@@ -104,11 +111,16 @@ var app = {
             var newStruggleName = $("#new_struggle_name").val();
             var newStruggleDesc = $("#new_struggle_desc").val();
             // sessionKey.struggle_list.add(newStruggleName);
-            API.addStruggle(
-                { "name": newStruggleName, "description": newStruggleDesc },
-                app.session.session_key,
-                showMainScreen
-            );
+            if (app.session.struggle_list.contains(newStruggleName)) {
+                alert(newStruggleName + " already exists!!!");
+            }
+            else {
+                API.addStruggle(
+                    { "name": newStruggleName, "description": newStruggleDesc },
+                    app.session.session_key,
+                    showMainScreen
+                );
+            }
             // showMainScreen();
             return false;
         });
@@ -125,9 +137,12 @@ var app = {
             showMainScreen();
         });
 
-        $("table tr").on("click", function() {
-            showSendStruggleScreen();
-        });
+        // $("table tr").on("click", function() {
+        //     showSendStruggleScreen();
+        // });
+
+  
+
 
         var sessionKey = window.localStorage.getItem("session_key");
         console.log("key:");
@@ -137,6 +152,9 @@ var app = {
                 
                 loggedIn(result);
             });
+        }
+        else {
+            showLoginScreen();
         }
     
 
@@ -157,6 +175,11 @@ function login(api_result) {
     
 }
 
+function showLoginScreen() {
+    hideAll();
+    $("#login_screen").removeClass("hidden");
+}
+
 function showMainScreen() {
     console.log("showMainScreen");
     // window.localStorage.setItem("session_key", api_result);
@@ -171,9 +194,22 @@ function showMainScreen() {
         for (var k in res) {
             app.session.struggle_list.add(k, res[k]);
         }
+
+     
+
         hideAll();        
         $("#main_screen").removeClass("hidden");
+
+        // $("td").on("click", function() {
+        //     alert("clicked!");
+        //     console.log("clicked: ", this);
+        //     console.log(" parent:", $(this).parent("tr").html());
+        // });
     });
+}
+
+function rowClicked() {
+    alert("clicked!");
 }
 
 // function showMainScreen(api_result) {
@@ -190,8 +226,9 @@ function loggedIn(api_result) {
     console.log("loggedIn");
     console.log(api_result);
     if (api_result["result"] == "failure") {
-        writeError("Login or register Failed!");
         loginFailed();
+        showLoginScreen();
+        writeError("Login or register Failed!");        
     }
     else {
         window.localStorage.setItem("session_key", api_result["key"]);
@@ -223,4 +260,11 @@ function writeError(msg) {
 function clearError() {
     console.log("clearError")
     $("#error_box").text("");
+}
+
+function logout() {
+    window.localStorage.removeItem("session_key");
+    app.session.username = null;
+    app.session.session_key = null;
+    showLoginScreen();
 }

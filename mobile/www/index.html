@@ -100,7 +100,7 @@
                                     <td class="desc-cell">{{ struggle.description }}</td>
                                 </tr>
                             </template>-->
-                            <tr v-for="struggle in struggles">
+                            <tr v-for="struggle in struggles" v-on:click="onClick(struggle.name)">
                                 <td class="icon-cell" v-html="struggle.icon"></td>
                                 <td class="desc-cell">{{ struggle.name }}</td>
                             </tr>
@@ -151,6 +151,15 @@
                     </div>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="btn-group-justified">
+                        <div class="btn-group">
+                            <button id="logout_btn" class="btn btn-default">LOGOUT</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div id="add_new_struggle_screen" class="hidden">
@@ -177,7 +186,7 @@
                                 <input class="btn btn-primary" type="submit" value="ADD" id="add_new_struggle_btn">
                             </div>
                              <div class="btn-group" role="group">
-                                <button class="btn btn-primary" id="cancel_add_new_struggle_btn">CANCEL</button>
+                                <button class="btn btn-primary" type="button" id="cancel_add_new_struggle_btn">CANCEL</button>
                             </div>
                         </div>
                     </div>
