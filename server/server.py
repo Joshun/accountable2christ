@@ -139,8 +139,8 @@ def make_app():
         (r"/authcheck", AuthCheckHandler),
         (r"/struggles", GetStrugglesHandler),
         (r"/struggles/new", AddStruggleHandler),
-        (r"/struggles/([0-9a-z]+)", ManageStruggleHandler),
-        (r"/struggles/([0-9a-z]+)/new_event", AddStruggleEventHandler),
+        (r"/struggles/([0-9a-zA-Z]+)", ManageStruggleHandler),
+        (r"/struggles/([0-9a-zA-Z]+)/new_event", AddStruggleEventHandler),
     ],
     autoreload=True,
     debug=True
