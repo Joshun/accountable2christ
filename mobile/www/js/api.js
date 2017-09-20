@@ -80,3 +80,17 @@ API.authCheck = function(api_key, callback) {
         }
     });
 };
+
+API.removeStruggle = function(struggle_name, api_key, callback) {
+    $.ajax({
+        "url": API.url + "/struggles/" + struggle_name,
+        // "method": "DELETE",
+        "type": "DELETE",
+        "headers": {
+            "Session-Key": api_key
+        },
+        "success": function(result) {
+            callback(result);
+        }
+    })
+}

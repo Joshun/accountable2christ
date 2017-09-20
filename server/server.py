@@ -110,6 +110,11 @@ class AuthCheckHandler(AuthHandler):
         else:
             self.write({"result": "failure"})
 
+class ManageStruggleHandler(AuthHandler):
+    def delete(self, struggle_name):
+        self.auth()
+        db_query.remove_struggle(self.auth_user, struggle_name)
+
 class GetStrugglesHandler(AuthHandler):
     def get(self):
         self.auth()
@@ -134,6 +139,7 @@ def make_app():
         (r"/authcheck", AuthCheckHandler),
         (r"/struggles", GetStrugglesHandler),
         (r"/struggles/new", AddStruggleHandler),
+        (r"/struggles/([0-9a-z]+)", ManageStruggleHandler),
         (r"/struggles/([0-9]+)/new_event", AddStruggleEventHandler),
     ],
     autoreload=True,

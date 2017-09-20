@@ -1,10 +1,10 @@
 var rng = new RNG(new Date().getTime());
 
-function StruggleList(vm) {
+function StruggleList(vms) {
     this.struggles = {}
     // this.struggles = (struggles == null) ? {} : struggles;
     this.usedColors = [];
-    this.vm = vm;
+    this.vms = vms;
 }
 
 StruggleList.prototype.add = function(name, description) {
@@ -13,7 +13,10 @@ StruggleList.prototype.add = function(name, description) {
         name: name,
         description: description
     };
-    this.vm.struggles = this.getList();
+
+    for (var i=0; i<this.vms.length; i++) {
+        this.vms[i].struggles = this.getList();
+    }
 };
 
 StruggleList.prototype.contains = function(name) {
@@ -27,21 +30,26 @@ StruggleList.prototype.contains = function(name) {
 
 StruggleList.prototype.clearAll = function() {
     this.struggles = {};
-    this.vm.struggles = this.getList();
+    for (var i=0; i<this.vms.length; i++) {
+        this.vms[i].struggles = this.getList();
+    }
 }
 
 StruggleList.prototype.setList = function(l) {
     this.struggles = l;
-    this.vm.struggles = this.getList();
-    // this.add("testing")
+    for (var i=0; i<this.vms.length; i++) {
+        this.vms[i].struggles = this.getList();
+    } // this.add("testing")
 }
 
 StruggleList.prototype.remove = function(text) {
     if (text in this.struggles) {
         delete this.struggles[text];
     }
-    this.vm.struggles = this.getList();
-};
+    for (var i=0; i<this.vms.length; i++) {
+        this.vms[i].struggles = this.getList();
+    }
+}
 
 StruggleList.prototype.getList = function() {
     var l = [];

@@ -115,6 +115,9 @@
                         <div class="btn-group" role="group">
                             <button class="btn btn-primary" id="add_new_struggle_scn_btn">ADD NEW</button>
                         </div>
+                        <div class="btn-group" role="group">
+                            <button class="btn btn-primary" id="manage_struggles_scn_btn">MANAGE</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -192,6 +195,31 @@
                     </div>
                 </div>
             </form>
+        </div>
+
+        <div id="manage_struggles_screen" class="hidden">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="dropdown">
+                        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Select...
+                        <span class="caret"></span></button>
+                        <ul class="dropdown-menu" id="manage_struggles_dropdown">
+                            <li v-for="struggle in struggles" v-on:click="onClick(struggle.name)">
+                                <ul>{{ struggle.name }}</ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="btn-group-justified">
+                        <div class="btn-group">
+                            <button class="btn btn-primary" id="manage_struggles_back">BACK</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div id="send_struggle_screen" class="hidden">

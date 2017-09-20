@@ -168,3 +168,14 @@ def add_struggle_event(username, struggle_id, timestamp, description):
 
     session.add(struggle_event)
     session.commit()
+
+def remove_struggle(username, struggle_name):
+    session = Session()
+    # res = session.query(Struggle).join(Struggle.user).filter((Struggle.user.username == username) & (Struggle.name == struggle_name)).first()
+    user = session.query(User).filter(User.username == username).first()
+    if user is not None:
+        struggle = session.query(Struggle).filter((Struggle.user == user ) & (Struggle.name == struggle_name)).first()
+
+        if struggle is not None:
+            session.delete(struggle)
+            session.commit()

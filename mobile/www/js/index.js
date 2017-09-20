@@ -51,7 +51,25 @@ var app = {
                 }
             }
           });
-        app.session.struggle_list = new StruggleList(app.session.vm);
+        app.session.dropdown_vm = new Vue({
+            el: "#manage_struggles_dropdown",
+            data: {
+                struggles: []
+            },
+            methods: {
+                onClick: function(struggle_name) {
+                    // alert(struggle_name);
+                    var delStruggle = confirm("Delete " + struggle_name + "?");
+                    if (delStruggle) {
+                        app.session.struggle_list.remove(struggle_name);
+                        API.removeStruggle(struggle_name, app.session.session_key, function(res) {
+                            alert("Done!");
+                        });
+                    }
+                }
+            }
+        });
+        app.session.struggle_list = new StruggleList([app.session.vm, app.session.dropdown_vm]);
 
         // $.ajax({
         //     "url": "http://10.0.2.2:8000/register",
@@ -137,6 +155,14 @@ var app = {
             showMainScreen();
         });
 
+        $("#manage_struggles_scn_btn").on("click", function() {
+            showManageStrugglesScreen();
+        });
+
+        $("#manage_struggles_back").on("click", function() {
+            showMainScreen();
+        });
+
         // $("table tr").on("click", function() {
         //     showSendStruggleScreen();
         // });
@@ -169,6 +195,7 @@ function hideAll() {
     $("#main_screen").addClass("hidden");
     $("#add_new_struggle_screen").addClass("hidden");
     $("#send_struggle_screen").addClass("hidden");
+    $("#manage_struggles_screen").addClass("hidden");
 }
 
 function login(api_result) {
@@ -245,6 +272,11 @@ function loginFailed() {
 function showAddStruggleScreen() {
     hideAll();
     $("#add_new_struggle_screen").removeClass("hidden");
+}
+
+function showManageStrugglesScreen() {
+    hideAll();
+    $("#manage_struggles_screen").removeClass("hidden");
 }
 
 function showSendStruggleScreen() {
