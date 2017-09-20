@@ -93,4 +93,20 @@ API.removeStruggle = function(struggle_name, api_key, callback) {
             callback(result);
         }
     })
+};
+
+API.addStruggleEvent = function(struggle_name, api_key, callback) {
+    $.ajax({
+        "url": API.url + "/struggles/" + struggle_name + "/new_event",
+        "method": "POST",
+        "headers": {
+            "Session-Key": api_key
+        },
+        "data": {
+            "timestamp": new Date().toISOString()
+        },
+        "success": function(result) {
+            callback(result);
+        }
+    })
 }

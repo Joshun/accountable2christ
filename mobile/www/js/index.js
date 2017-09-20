@@ -47,7 +47,9 @@ var app = {
             },
             methods: {
                 onClick: function(struggle_name) {
-                    alert(struggle_name);
+                    API.addStruggleEvent(struggle_name, app.session.session_key, function(res) {
+                        alert("Sent!");
+                    });
                 }
             }
           });
