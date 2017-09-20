@@ -152,7 +152,7 @@ def add_struggle(username, struggle_name, struggle_description):
         return "ok"
 
 # def add_struggle_event(username, struggle_id, timestamp, description):
-def add_struggle_event(username, struggle_id, timestamp):
+def add_struggle_event(username, struggle_name, timestamp):
     session = Session()
 
     user = session.query(User).filter(User.username == username).first()
@@ -161,8 +161,9 @@ def add_struggle_event(username, struggle_id, timestamp):
         return "err_invalid_user"
 
     struggle = session.query(Struggle).filter(
-        (Struggle.id == struggle_id)
-        & (Struggle.user == user)).first()
+        (Struggle.user == user)
+        & (Struggle.name == struggle_name)
+        ).first()
 
     if struggle is None:
         print("struggle invalid")

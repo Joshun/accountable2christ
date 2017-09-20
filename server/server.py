@@ -93,11 +93,11 @@ class AddStruggleHandler(AuthHandler):
         self.write({"operation_result": add_strug_res})
 
 class AddStruggleEventHandler(AuthHandler):
-    def post(self, struggle_id):
+    def post(self, struggle_name):
         self.auth()
         strug_event_timestamp = self.get_body_argument("timestamp")
         # strug_event_desc = self.get_body_argument("description")
-        add_strug_event_res = db_query.add_struggle_event(self.auth_user, struggle_id, strug_event_timestamp)
+        add_strug_event_res = db_query.add_struggle_event(self.auth_user, struggle_name, strug_event_timestamp)
         self.write({"operation_result": add_strug_event_res})
 
 class AuthCheckHandler(AuthHandler):
