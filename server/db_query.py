@@ -239,11 +239,13 @@ def get_accountability_partners(username):
     }
 
 def confirm_partner(initiator_username, responder_username):
+    print("confirm_partner", initiator_username, responder_username)
     session = Session()
     initiator_user = session.query(User).filter(User.username == initiator_username).first()
     responder_user = session.query(User).filter(User.username == responder_username).first()
 
     if initiator_user is None or responder_user is None:
+        print("not found")
         return False
 
     partner_relation = session.query(UserAccountabilityPartnerRelation).filter(
@@ -253,8 +255,10 @@ def confirm_partner(initiator_username, responder_username):
     ).first()
 
     if partner_relation is None:
+        print("failed")
         return False
     else:
+        print("CONFIRMED1")
         partner_relation.confirmed = True
         session.add(partner_relation)
         session.commit()

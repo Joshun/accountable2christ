@@ -145,6 +145,9 @@ API.confirmAccountabilityPartnerRequest = function(partner_name, api_key, callba
     $.ajax({
         "url": API.url + "/partners/confirm",
         "method": "POST",
+        "data": {
+            "accountability_partner": partner_name
+        },
         "headers": {
             "Session-Key": api_key
         },

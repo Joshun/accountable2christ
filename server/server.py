@@ -162,10 +162,11 @@ class ConfirmAccountabilityPartnerHandler(AuthHandler):
         self.auth()
 
         accountability_partner = self.get_body_argument("accountability_partner", default=None)
+        print("accountability_partner:", accountability_partner)
         if accountability_partner is None:
             self.write("ERR")
         else:
-            res = db_query.confirm_partner(accountability_partner, self.auth)
+            res = db_query.confirm_partner(accountability_partner, self.auth_user)
             self.write({"result": res})
         
         self.finish()
