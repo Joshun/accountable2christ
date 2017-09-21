@@ -20,7 +20,7 @@ def sanitise_dict(d):
         if isinstance(d[k], dict):
             d[k] = sanitise_dict(d)
         else:
-            if isinstance(d[k], InstanceState):
+            if isinstance(d[k], InstanceState) or isinstance(d[k], User):
                 dellist.append(k)
     for k in dellist:
         del d[k]
@@ -200,5 +200,62 @@ def add_accountability_partner(username, partner_username):
     else:
         user_acc_relation = UserAccountabilityPartnerRelation(initiator_user=user, responder_user=acc_user, confirmed=False)
         session.add(user_acc_relation)
+        session.commit()
+        return True
+
+def get_other_partner(username, relation):
+    if relation.initiator_user == username:
+        return relation.responder_user.username
+    else:
+        return relation.initiator_user.username
+
+def get_accountability_partners(username):
+    session = Session()
+    user = session.query(User).filter(User.username == username).first()
+
+    if user is None:
+        return None
+
+    # partners that have been confirmed
+    partners = session.query(UserAccountabilityPartnerRelation).filter(
+        ((UserAccountabilityPartnerRelation.initiator_user == user)
+        | (UserAccountabilityPartnerRelation.responder_user == user))
+        & (UserAccountabilityPartnerRelation.confirmed == True)).all()
+    
+    # partners that the user is waiting to be accepted
+    pending_partners = session.query(UserAccountabilityPartnerRelation).filter(
+        (UserAccountabilityPartnerRelation.initiator_user == user)
+        & (UserAccountabilityPartnerRelation.confirmed == False)).all()
+    
+    # partners that the user is yet to accept
+    waiting_partners = session.query(UserAccountabilityPartnerRelation).filter(
+        (UserAccountabilityPartnerRelation.responder_user == user)
+        & (UserAccountabilityPartnerRelation.confirmed == False)).all()
+
+    return {
+        "partners": [{"relation": sanitise_dict(copy(x.__dict__)), "other_partner": get_other_partner(username, x)} for x in partners],
+        "pending_partners": [{"relation": sanitise_dict(copy(x.__dict__)), "other_partner": x.responder_user.username} for x in pending_partners],
+        "waiting_partners": [{"relation": sanitise_dict(copy(x.__dict__)), "other_partner": x.initiator_user.username} for x in waiting_partners]
+    }
+
+def confirm_partner(initiator_username, responder_username):
+    session = Session()
+    initiator_user = session.query(User).filter(User.username == initiator_username).first()
+    responder_user = session.query(User).filter(User.username == responder_username).first()
+
+    if initiator_user is None or responder_user is None:
+        return False
+
+    partner_relation = session.query(UserAccountabilityPartnerRelation).filter(
+        (UserAccountabilityPartnerRelation.confirmed == False)
+        & (UserAccountabilityPartnerRelation.initiator_user == initiator_user)
+        & (UserAccountabilityPartnerRelation.responder_user == responder_user)
+    ).first()
+
+    if partner_relation is None:
+        return False
+    else:
+        partner_relation.confirmed = True
+        session.add(partner_relation)
         session.commit()
         return True

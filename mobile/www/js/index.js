@@ -269,6 +269,11 @@ function showMainScreen() {
         //     console.log("clicked: ", this);
         //     console.log(" parent:", $(this).parent("tr").html());
         // });
+        API.loadAccountabilityPartners(app.session.session_key, function(res) {
+            console.log(res);
+            alert(res);
+            alert("loaded");
+        });
     });
 }
 

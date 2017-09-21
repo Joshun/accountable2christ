@@ -145,6 +145,13 @@ class AddAccountabilityPartnerHandler(AuthHandler):
 class GetAccountabilityPartnersHandler(AuthHandler):
     def get(self):
         self.auth()
+        res = db_query.get_accountability_partners(self.auth_user)
+        if res is not None:
+            self.write(res)
+        else:
+            self.write("ERR")
+    
+        self.finish()
 
 class ViewAccountabilityPartnerHandler(AuthHandler):
     def get(self, accountability_partner):

@@ -127,3 +127,16 @@ API.sendAccountabilityPartnerRequest = function(partner_name, api_key, callback)
         }
     })
 }
+
+API.loadAccountabilityPartners = function(api_key, callback) {
+    $.ajax({
+        "url": API.url + "/partners",
+        "method": "GET",
+        "headers": {
+            "Session-Key": api_key
+        },
+        "success": function(result) {
+            callback(result);
+        }
+    })
+}
