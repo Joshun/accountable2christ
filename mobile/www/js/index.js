@@ -73,6 +73,18 @@ var app = {
         });
         app.session.struggle_list = new StruggleList([app.session.vm, app.session.dropdown_vm]);
 
+        app.session.pending_partners_vm = new Vue({
+            el: "#pending_partners_table",
+            data: {
+                pending_partners: []
+            },
+            methods: {
+                confirm: function(other_user) {
+                    alert("Confirm " + other_user);
+                }
+            }
+        })
+
         // $.ajax({
         //     "url": "http://10.0.2.2:8000/register",
         //     "data": {
@@ -270,6 +282,7 @@ function showMainScreen() {
         //     console.log(" parent:", $(this).parent("tr").html());
         // });
         API.loadAccountabilityPartners(app.session.session_key, function(res) {
+            app.session.pending_partners_vm.pending_partners = res["pending_partners"];
             console.log(res);
             alert(res);
             alert("loaded");
