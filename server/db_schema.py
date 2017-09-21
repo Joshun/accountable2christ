@@ -53,10 +53,10 @@ class UserAccountabilityPartnerRelation(Base):
     id = Column(Integer, primary_key=True)
     initiator_user_id = Column(Integer, ForeignKey("users.id"))
     responder_user_id = Column(Integer, ForeignKey("users.id"))
+    # bool for whether request has been accepted    
     confirmed = Column(Boolean, default=False)    
     initiator_user = relationship("User", foreign_keys=[initiator_user_id])
     responder_user = relationship("User", foreign_keys=[responder_user_id])
-    # bool for whether request has been accepted
 
 Base.metadata.create_all(engine)
 
