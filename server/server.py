@@ -5,12 +5,20 @@ import datetime
 
 import db_query
 
-class MyJSONEncoder(json.JSONEncoder):
-      def default(self, obj):
-        if isinstance(obj, datetime.datetime):
-            return obj.isoformat()
+# class MyJSONEncoder(json.JSONEncoder):
+#     def default(self, obj):
+#         if isinstance(obj, datetime.datetime):
+#             return obj.isoformat()
 
-        return json.JSONEncoder.default(self, obj)
+        # return json.JSONEncoder.default(self, obj)
+
+class MyJSONEncoder(json.JSONEncoder):
+    def default(self, o):
+        if isinstance(o, datetime.datetime):
+            return o.isoformat()
+
+        return json.JSONEncoder.default(self, o)
+
 
 class AuthHandler(tornado.web.RequestHandler):
     def auth(self):
@@ -161,6 +169,10 @@ class ViewAccountabilityPartnerHandler(AuthHandler):
         print("acc_partner!!", acc_partner_username)
         # print("partner_relation!!", acc_partner_relation)
         # if acc_partner_username is None or acc_partner_relation is None:
+        self.content_type = 'application/json'
+        self.set_header("Content-Type", "application/json")
+
+
         if acc_partner_username is None:
             self.write("ERR")
         else:
@@ -168,7 +180,10 @@ class ViewAccountabilityPartnerHandler(AuthHandler):
             if res is None:
                 self.write("ERR")
             else:
+                # self.write(json.dumps({"result": res}, cls=MyJSONEncoder))
+                print(type(res))
                 self.write(json.dumps(res, cls=MyJSONEncoder))
+        self.finish()
 
 class ConfirmAccountabilityPartnerHandler(AuthHandler):
     def post(self):

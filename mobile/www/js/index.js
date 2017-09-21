@@ -114,8 +114,12 @@ var app = {
                     // console.log(app.session.partners_list);
                     // partner_relation = app.session.partners_list[other_user.other_partner];
                     API.viewAccountabilityPartner(other_user.other_partner, app.session.session_key, function(result) {
-                        alert(result);
-                        console.log(result);
+                        // alert(result);
+                        // console.log(result);
+                        // console.log(result);
+                        // alert(extractStruggleEvents(result));
+                        console.log("result::")
+                        console.log(extractStruggleEvents(result));
                     })
                 }
             }
@@ -409,4 +413,23 @@ function logout() {
     app.session.username = null;
     app.session.session_key = null;
     showLoginScreen();
+}
+
+function extractStruggleEvents(partner_data) {
+    console.log(partner_data);
+    struggles_list = {};
+    // console.log(partner_data["partner_name"]);
+    var struggles = partner_data["struggles"];
+    // console.log(partner_data["struggles"]);
+    for (var struggle in struggles) {
+        // console.log(struggle);
+        struggle_events = partner_data.struggles[struggle].struggle_events;
+        var events = [];
+        for (var e in struggle_events) {
+            // console.log(e);
+            events.push(struggle_events[e].timestamp);
+        }
+        struggles_list[struggle] = events;
+    }
+    return struggles_list;
 }
