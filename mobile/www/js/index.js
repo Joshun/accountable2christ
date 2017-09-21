@@ -100,8 +100,8 @@ var app = {
                     alert("View " + other_user.other_partner);
                     // console.log(other_user.relation)
                     console.log("usersssss")
-                    console.log(other_user.other_partner.toString())
-                    console.log(other_user.relation)
+                    // console.log(other_user.other_partner.toString())
+                    // console.log(other_user.relation)
                     console.log(other_user)
                     // relation = {
                     //     "confirmed": other_user.relation.confirmed,
@@ -109,7 +109,7 @@ var app = {
                     //     "initiator_user_id": other_user.relation.initiator_user_id,
                     //     "responder_user_id": other_user.relation.responder_user_id
                     // };
-                    console.log(relation)
+                    // console.log(relation)
                     // console.log(other_user.other_partner)
                     // console.log(app.session.partners_list);
                     // partner_relation = app.session.partners_list[other_user.other_partner];
