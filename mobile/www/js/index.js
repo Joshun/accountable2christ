@@ -82,6 +82,7 @@ var app = {
                 confirm: function(other_user) {
                     API.confirmAccountabilityPartnerRequest(other_user, app.session.session_key, function(result) {
                         alert("Confirmed " + other_user); 
+                        showMainScreen();
                     });
                 }
             }
