@@ -87,6 +87,18 @@ var app = {
             }
         })
 
+        app.session.acc_partners_vm = new Vue({
+            el: "#acc_partners_table",
+            "data": {
+                partners: []
+            },
+            methods: {
+                view: function(other_user) {
+                    alert("View " + other_user.other_partner);
+                }
+            }
+        })
+
         // $.ajax({
         //     "url": "http://10.0.2.2:8000/register",
         //     "data": {
@@ -293,6 +305,7 @@ function showMainScreen() {
         // });
         API.loadAccountabilityPartners(app.session.session_key, function(res) {
             app.session.waiting_partners_vm.waiting_partners = res["waiting_partners"];
+            app.session.acc_partners_vm.partners = res["partners"];
             console.log("loadAccountabilityPartners");
             console.log(res);
             // alert(res);

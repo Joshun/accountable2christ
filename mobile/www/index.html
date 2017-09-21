@@ -133,12 +133,13 @@
                     <table class="table table-striped" id="acc_partners_table">
                         <thead>
                             <th></th>
-                            <th></th>
+                            <!-- <th></th> -->
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>joe@live.com</td>
-                                <td>Joe Bloggs</td>
+                            <tr v-for="partner in partners" v-on:click="view(partner)">
+                                <td>{{ partner.other_partner }}</td>
+                                <!-- <td>joe@live.com</td>
+                                <td>Joe Bloggs</td> -->
                             </tr>
                         </tbody>
                     </table>
