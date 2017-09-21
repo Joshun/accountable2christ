@@ -120,8 +120,23 @@ var app = {
                         // alert(extractStruggleEvents(result));
                         console.log("result::")
                         console.log(extractStruggleEvents(result));
-                    })
+                        // app.session.partner_struggles_vm = [];
+                        var struggles = [];
+                        for (k in result.struggles) {
+                            struggles.push(k);
+                        }
+                        app.session.partner_struggles_vm.struggles = struggles;
+                        showViewAccountabilityPartnerScreen(other_user.other_partner);
+
+                    });
                 }
+            }
+        });
+
+        app.session.partner_struggles_vm = new Vue({
+            el: "#partner_struggles_menu",
+            data: {
+                "struggles": []
             }
         })
 
@@ -255,6 +270,10 @@ var app = {
             showMainScreen();
         });
 
+        $("#view_partner_back").on("click", function() {
+            showMainScreen();
+        })
+
         $("#add_new_acc_partner_scn").on("click", function() {
             showAddAccountabilityPartnerScreen();
         });
@@ -293,6 +312,7 @@ function hideAll() {
     $("#send_struggle_screen").addClass("hidden");
     $("#manage_struggles_screen").addClass("hidden");
     $("#add_accountability_partner_screen").addClass("hidden");
+    $("#view_accountability_partner_screen").addClass("hidden");
 }
 
 function login(api_result) {
@@ -302,6 +322,12 @@ function login(api_result) {
 function showLoginScreen() {
     hideAll();
     $("#login_screen").removeClass("hidden");
+}
+
+function showViewAccountabilityPartnerScreen(partner_name) {
+    hideAll();
+    $("#partner_name_heading").text(partner_name);
+    $("#view_accountability_partner_screen").removeClass("hidden");
 }
 
 function showMainScreen() {

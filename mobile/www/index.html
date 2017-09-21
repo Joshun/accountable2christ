@@ -291,6 +291,31 @@
             </div>
         </div>
 
+        <div id="view_accountability_partner_screen" class="hidden">
+            <div class="row">
+                <div class="col-xs-12">
+                    <h2 id="partner_name_heading">ACCOUNTABILITY PARTNER</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="dropdown">
+                        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Select struggle...
+                        <span class="caret"></span></button>
+                        <ul id="partner_struggles_menu" class="dropdown-menu">
+                            <li v-for="struggle in struggles">
+                                <a href="#">{{struggle}}</a>                                  
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <button class="btn" type="button" id="view_partner_back">Back</button>
+                </div>
+            </div>
+        </div>
         <div class="row">
             <div class="col-xs-12">
                 <p id="error_box"></p>
