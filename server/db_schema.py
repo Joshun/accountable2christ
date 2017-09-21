@@ -5,8 +5,8 @@ from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
 
-engine = create_engine('sqlite:///:memory:', echo=True)
-# engine = create_engine('mysql+pymysql://a2c:john15@localhost/a2c_dev', echo=True, pool_recycle=50)
+# engine = create_engine('sqlite:///:memory:', echo=True)
+engine = create_engine('mysql+pymysql://a2c:john15@localhost/a2c_dev', echo=True, pool_recycle=50)
 
 
 class UserKey(Base):
@@ -43,7 +43,7 @@ class User(Base):
     __tablename__ = "users"
     id = Column(Integer, primary_key=True)
     username = Column(String(45))
-    bcrypt_password = Column(String(45))
+    bcrypt_password = Column(String(255))
 
     struggles = relationship("Struggle", back_populates="user")
     user_keys = relationship("UserKey", back_populates="user")

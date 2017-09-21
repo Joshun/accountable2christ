@@ -154,8 +154,21 @@ class GetAccountabilityPartnersHandler(AuthHandler):
         self.finish()
 
 class ViewAccountabilityPartnerHandler(AuthHandler):
-    def get(self, accountability_partner):
+    def get(self):
         self.auth()
+        acc_partner_username = self.get_query_argument("accountability_partner", default=None)
+        # acc_partner_relation = self.get_query_argument("partner_relation", default=None)
+        print("acc_partner!!", acc_partner_username)
+        # print("partner_relation!!", acc_partner_relation)
+        # if acc_partner_username is None or acc_partner_relation is None:
+        if acc_partner_username is None:
+            self.write("ERR")
+        else:
+            res = db_query.get_accountability_partner_data(self.auth_user, acc_partner_username)
+            if res is None:
+                self.write("ERR")
+            else:
+                self.write(json.dumps(res, cls=MyJSONEncoder))
 
 class ConfirmAccountabilityPartnerHandler(AuthHandler):
     def post(self):
@@ -187,7 +200,7 @@ def make_app():
         (r"/partners/new", AddAccountabilityPartnerHandler),
         (r"/partners/confirm", ConfirmAccountabilityPartnerHandler),
         (r"/partners", GetAccountabilityPartnersHandler),
-        (r"/partners/([0-9a-zA-Z]+)", ViewAccountabilityPartnerHandler),
+        (r"/partners/view", ViewAccountabilityPartnerHandler),
     ],
     autoreload=True,
     debug=True

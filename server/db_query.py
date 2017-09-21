@@ -263,3 +263,53 @@ def confirm_partner(initiator_username, responder_username):
         session.add(partner_relation)
         session.commit()
         return True
+
+def get_accountability_partner_data(username, acc_partner_username):
+    session = Session()
+
+    user = session.query(User).filter(User.username == username).first()
+    acc_partner = session.query(User).filter(User.username == acc_partner_username).first()
+    if user is None or acc_partner is None:
+        print("not found!!!")
+        return None
+
+    # print("relation!!")
+    # print(relation)
+
+    # db_relation = session.query(UserAccountabilityPartnerRelation).filter(
+    #     (UserAccountabilityPartnerRelation.id == relation.id)
+    #     # Below filters not strictly necessary but provide sanity check
+    #     & (UserAccountabilityPartnerRelation.confirmed == True)
+    #     & (UserAccountabilityPartnerRelation.initiator_user_id == relation.initiator_user_id)
+    #     & (UserAccountabilityPartnerRelation.responder_user_id == relation.responder_user_id)
+    # ).first()
+
+    relation = session.query(UserAccountabilityPartnerRelation).filter(
+        (UserAccountabilityPartnerRelation.confirmed == True)
+        & ( 
+            ((UserAccountabilityPartnerRelation.initiator_user == user) & (UserAccountabilityPartnerRelation.responder_user == acc_partner))
+            | ((UserAccountabilityPartnerRelation.initiator_user == acc_partner) & (UserAccountabilityPartnerRelation.responder_user == user))
+        )
+    )
+
+    if relation is None:
+        return None
+    else:
+        # # Security check: prevent unauthorised access
+        # if db_relation.initiator_user != user and db_relation.responder_user != user:
+        #     return None
+        # else:
+        struggles = session.query(Struggle).filter(Struggle.user == acc_partner).all()
+        struggles_dict = {}
+        for struggle in struggles:
+            struggles_dict[struggle.name] = sanitise_dict(copy(struggle.__dict__))
+            struggles_dict[struggle.name]["struggle_events"] = []
+            for e in struggle.struggle_events:
+                struggles_dict[struggle.name]["struggle_events"].append(sanitise_dict(copy(e.__dict__)))
+            
+        return {"partner_name": acc_partner.username, "struggles": struggles_dict}
+
+
+    # relation = session.query(UserAccountabilityPartnerRelation).filter(
+    #     (UserAccountabilityPartnerRelation.confirmed == True)
+    #     & ((UserAccountabilityPartnerRelation.initiator_user == username) & (UserAccountabilityPartnerRelation.responder_user == acc))

@@ -156,3 +156,22 @@ API.confirmAccountabilityPartnerRequest = function(partner_name, api_key, callba
         }
     })
 }
+
+API.viewAccountabilityPartner = function(partner_name, api_key, callback) {
+    $.ajax({
+        "url": API.url + "/partners/view",
+        "method": "GET",
+        "data": {
+            "accountability_partner": partner_name,
+            // "partner_relation": partner_relation
+        // },
+        },
+        "headers": {
+            "Session-Key": api_key
+        },
+        "success": function(result) {
+            callback(result);
+        }
+    })
+
+}

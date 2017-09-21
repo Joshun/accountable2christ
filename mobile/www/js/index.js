@@ -87,6 +87,8 @@ var app = {
             }
         })
 
+        app.session.partners_list = {};
+
         app.session.acc_partners_vm = new Vue({
             el: "#acc_partners_table",
             "data": {
@@ -95,6 +97,25 @@ var app = {
             methods: {
                 view: function(other_user) {
                     alert("View " + other_user.other_partner);
+                    // console.log(other_user.relation)
+                    console.log("usersssss")
+                    console.log(other_user.other_partner.toString())
+                    console.log(other_user.relation)
+                    console.log(other_user)
+                    // relation = {
+                    //     "confirmed": other_user.relation.confirmed,
+                    //     "id": other_user.relation.id,
+                    //     "initiator_user_id": other_user.relation.initiator_user_id,
+                    //     "responder_user_id": other_user.relation.responder_user_id
+                    // };
+                    console.log(relation)
+                    // console.log(other_user.other_partner)
+                    // console.log(app.session.partners_list);
+                    // partner_relation = app.session.partners_list[other_user.other_partner];
+                    API.viewAccountabilityPartner(other_user.other_partner, app.session.session_key, function(result) {
+                        alert(result);
+                        console.log(result);
+                    })
                 }
             }
         })
@@ -306,6 +327,10 @@ function showMainScreen() {
         API.loadAccountabilityPartners(app.session.session_key, function(res) {
             app.session.waiting_partners_vm.waiting_partners = res["waiting_partners"];
             app.session.acc_partners_vm.partners = res["partners"];
+            for (var partner in res["partners"]) {
+                app.session.partners_list[partner.partner_name] = partner;
+            }
+            // app.session.partners_list = res["partners"];
             console.log("loadAccountabilityPartners");
             console.log(res);
             // alert(res);
