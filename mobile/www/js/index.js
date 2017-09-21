@@ -152,11 +152,19 @@ var app = {
         });
 
         $("#add_accountability_partner_form").submit(function() {
-            API.sendAccountabilityPartnerRequest($("#add_acc_partner_username").val(), app.session.session_key, function(result) {
-                alert("Request sent.");
-                showMainScreen();
-            });
-
+            if ($("#add_acc_partner_username").val().length == 0) {
+                alert("Must enter a username of an accountability partner");
+            }
+            else if ($("#add_acc_partner_username").val() == app.session.username) {
+                alert("Cannot add yourself!");
+            }
+            else {
+                API.sendAccountabilityPartnerRequest($("#add_acc_partner_username").val(), app.session.session_key, function(result) {
+                    alert("Request sent.");
+                    showMainScreen();
+                });
+            }
+            
             return false;
         });
 
