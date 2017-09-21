@@ -126,6 +126,9 @@ var app = {
                             struggles.push(k);
                         }
                         app.session.partner_struggles_vm.struggles = struggles;
+
+                        app.session.partner_struggles_for_chart = extractStruggleEvents(result);
+
                         showViewAccountabilityPartnerScreen(other_user.other_partner);
 
                     });
@@ -137,8 +140,15 @@ var app = {
             el: "#partner_struggles_menu",
             data: {
                 "struggles": []
+            },
+            methods: {
+                plotChart: function(struggle) {
+                    doPlotChart(app.session.partner_struggles_for_chart);
+                }
             }
-        })
+        });
+
+        app.session.partner_struggles_for_chart = {};
 
         // $.ajax({
         //     "url": "http://10.0.2.2:8000/register",
@@ -458,4 +468,13 @@ function extractStruggleEvents(partner_data) {
         struggles_list[struggle] = events;
     }
     return struggles_list;
+}
+
+function doPlotChart(struggle_data_points) {
+    // var ctx = $("#struggle_freq_chart").getContext("2d");
+    var ctx = document.getElementById("struggle_freq_chart").getContext("2d");
+    var myChart = new Chart(ctx, {
+        type: 'time',
+        datasets: struggle_data_points
+    });
 }

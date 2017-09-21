@@ -303,11 +303,16 @@
                         <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Select struggle...
                         <span class="caret"></span></button>
                         <ul id="partner_struggles_menu" class="dropdown-menu">
-                            <li v-for="struggle in struggles">
+                            <li v-for="struggle in struggles" v-on:click="plotChart(struggle)">
                                 <a href="#">{{struggle}}</a>                                  
                             </li>
                         </ul>
                     </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <canvas id="struggle_freq_chart" width="240" height="240"></canvas>
                 </div>
             </div>
             <div class="row">
