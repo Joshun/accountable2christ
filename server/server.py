@@ -157,6 +157,19 @@ class ViewAccountabilityPartnerHandler(AuthHandler):
     def get(self, accountability_partner):
         self.auth()
 
+class ConfirmAccountabilityPartnerHandler(AuthHandler):
+    def post(self):
+        self.auth()
+
+        accountability_partner = self.get_body_argument("accountability_partner", default=None)
+        if accountability_partner is None:
+            self.write("ERR")
+        else:
+            res = db_query.confirm_partner(accountability_partner, self.auth)
+            self.write({"result": res})
+        
+        self.finish()
+
 def make_app():
     return tornado.web.Application([
         (r"/", MainHandler),
@@ -171,6 +184,7 @@ def make_app():
         (r"/struggles/([0-9a-zA-Z]+)", ManageStruggleHandler),
         (r"/struggles/([0-9a-zA-Z]+)/new_event", AddStruggleEventHandler),
         (r"/partners/new", AddAccountabilityPartnerHandler),
+        (r"/partners/confirm", ConfirmAccountabilityPartnerHandler),
         (r"/partners", GetAccountabilityPartnersHandler),
         (r"/partners/([0-9a-zA-Z]+)", ViewAccountabilityPartnerHandler),
     ],

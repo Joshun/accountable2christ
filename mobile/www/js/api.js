@@ -140,3 +140,16 @@ API.loadAccountabilityPartners = function(api_key, callback) {
         }
     })
 }
+
+API.confirmAccountabilityPartnerRequest = function(partner_name, api_key, callback) {
+    $.ajax({
+        "url": API.url + "/partners/confirm",
+        "method": "POST",
+        "headers": {
+            "Session-Key": api_key
+        },
+        "success": function(result) {
+            callback(result);
+        }
+    })
+}
