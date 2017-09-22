@@ -146,7 +146,7 @@ var app = {
             },
             methods: {
                 plotChart: function(struggle) {
-                    doPlotChart(app.session.partner_struggles_for_chart.struggles[struggle].struggle_events);
+                    doPlotChart(app.session.partner_struggles_for_chart.struggles[struggle].struggle_events, struggle);
                 }
             }
         });
@@ -486,7 +486,7 @@ function splitDataPoints(struggle_data_points) {
     return retval;
 }
 
-function doPlotChart(struggle_data_points) {
+function doPlotChart(struggle_data_points, struggle_name) {
     console.log("plot:");
     console.log(struggle_data_points);
     console.log(splitDataPoints(struggle_data_points));
@@ -497,11 +497,14 @@ function doPlotChart(struggle_data_points) {
     var myChart = new Chart(ctx, {
         type: 'bar',
         // datasets: struggle_data_points
-        labels: split_points.dates,
-        datasets: {
-            data: split_points.counts,
-            borderColor: "rgba(220,20,20,1)",
-            backgroundColor: "rgba(220,20,20,0.5)"
+        data: {
+            labels: split_points.dates,
+            datasets: [{
+                label: struggle_name,
+                data: split_points.counts
+                // borderColor: "rgba(220,20,20,1)",
+                // backgroundColor: "rgba(220,20,20,0.5)"
+            }]
         },
         options: {
             scales: {
