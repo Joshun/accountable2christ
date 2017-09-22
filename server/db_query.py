@@ -206,7 +206,7 @@ def add_accountability_partner(username, partner_username):
         return True
 
 def get_other_partner(username, relation):
-    if relation.initiator_user == username:
+    if relation.initiator_user.username == username:
         return relation.responder_user.username
     else:
         return relation.initiator_user.username
