@@ -1,5 +1,6 @@
 import tornado.ioloop
 import tornado.web
+from tornado import gen
 import json
 import datetime
 
@@ -41,11 +42,13 @@ class AuthHandler(tornado.web.RequestHandler):
 
 
 class MainHandler(tornado.web.RequestHandler):
+    @gen.coroutine    
     def get(self):
         self.write("This server is for making requests to the Accountable2Christ API")
         self.finish()
 
 class LoginHandler(tornado.web.RequestHandler):
+    @gen.coroutine    
     def post(self):
         username = self.get_body_argument("username", default=None)
         password = self.get_body_argument("password", default=None)
@@ -59,6 +62,7 @@ class LoginHandler(tornado.web.RequestHandler):
         self.finish()
 
 class RegistrationHandler(tornado.web.RequestHandler):
+    @gen.coroutine    
     def post(self):
         username = self.get_body_argument("username", default=None)
         password = self.get_body_argument("password", default=None)
@@ -73,17 +77,20 @@ class RegistrationHandler(tornado.web.RequestHandler):
 
 
 class UsersHandler(tornado.web.RequestHandler):
+    @gen.coroutine    
     def get(self):
         users = db_query.get_users()
         self.write(json.dumps({"users": users}))
 
 class KeyHandler(tornado.web.RequestHandler):
+    @gen.coroutine    
     def get(self):
         user_keys = db_query.get_user_keys()
         self.write(json.dumps({"keys": user_keys}, cls=MyJSONEncoder))
         self.finish()
 
 class KeyCheckHandler(tornado.web.RequestHandler):
+    @gen.coroutine    
     def get(self):
         key = self.get_query_argument("session_key", default=None)
         username = self.get_query_argument("username", default=None)
@@ -92,6 +99,7 @@ class KeyCheckHandler(tornado.web.RequestHandler):
         self.write({"key": user_key})
 
 class AddStruggleHandler(AuthHandler):
+    @gen.coroutine    
     def post(self):
         self.auth()
         struggle_name = self.get_body_argument("name")
@@ -103,6 +111,7 @@ class AddStruggleHandler(AuthHandler):
         self.write({"operation_result": add_strug_res})
 
 class AddStruggleEventHandler(AuthHandler):
+    @gen.coroutine    
     def post(self, struggle_name):
         self.auth()
         strug_event_timestamp = self.get_body_argument("timestamp")
@@ -111,6 +120,7 @@ class AddStruggleEventHandler(AuthHandler):
         self.write({"operation_result": add_strug_event_res})
 
 class AuthCheckHandler(AuthHandler):
+    @gen.coroutine    
     def get(self):
         self.auth()
         # print(self.auth_user)
@@ -121,11 +131,13 @@ class AuthCheckHandler(AuthHandler):
             self.write({"result": "failure"})
 
 class ManageStruggleHandler(AuthHandler):
+    @gen.coroutine    
     def delete(self, struggle_name):
         self.auth()
         db_query.remove_struggle(self.auth_user, struggle_name)
 
 class GetStrugglesHandler(AuthHandler):
+    @gen.coroutine    
     def get(self):
         self.auth()
         struggle_list = db_query.get_struggles(self.auth_user)
@@ -139,6 +151,7 @@ class GetStrugglesHandler(AuthHandler):
             self.write("ERR")
 
 class AddAccountabilityPartnerHandler(AuthHandler):
+    @gen.coroutine
     def post(self):
         self.auth()
         if self.auth_user is None:
@@ -153,6 +166,7 @@ class AddAccountabilityPartnerHandler(AuthHandler):
 
 
 class GetAccountabilityPartnersHandler(AuthHandler):
+    @gen.coroutine    
     def get(self):
         self.auth()
         res = db_query.get_accountability_partners(self.auth_user)
@@ -164,6 +178,7 @@ class GetAccountabilityPartnersHandler(AuthHandler):
         self.finish()
 
 class ViewAccountabilityPartnerHandler(AuthHandler):
+    @gen.coroutine    
     def get(self):
         self.auth()
         acc_partner_username = self.get_query_argument("accountability_partner", default=None)
@@ -188,6 +203,7 @@ class ViewAccountabilityPartnerHandler(AuthHandler):
         self.finish()
 
 class ConfirmAccountabilityPartnerHandler(AuthHandler):
+    @gen.coroutine    
     def post(self):
         self.auth()
 
