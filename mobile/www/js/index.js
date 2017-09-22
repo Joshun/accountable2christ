@@ -473,13 +473,54 @@ function extractStruggleEvents(partner_data) {
     return struggles_list;
 }
 
+function splitDataPoints(struggle_data_points) {
+    var dates = [];
+    var counts = [];
+    for (var p in struggle_data_points) {
+        print(p);
+        counts.push(struggle_data_points[p][0]);
+        dates.push(struggle_data_points[p][1]);
+    }
+
+    var retval = { "dates": dates, "counts": counts};
+    return retval;
+}
+
 function doPlotChart(struggle_data_points) {
     console.log("plot:");
     console.log(struggle_data_points);
+    console.log(splitDataPoints(struggle_data_points));
+    var split_points = splitDataPoints(struggle_data_points);
     // var ctx = $("#struggle_freq_chart").getContext("2d");
     var ctx = document.getElementById("struggle_freq_chart").getContext("2d");
+    console.log(split_points.counts);
     var myChart = new Chart(ctx, {
-        type: 'time',
-        datasets: struggle_data_points
+        type: 'bar',
+        // datasets: struggle_data_points
+        labels: split_points.dates,
+        datasets: {
+            data: split_points.counts,
+            borderColor: "rgba(220,20,20,1)",
+            backgroundColor: "rgba(220,20,20,0.5)"
+        },
+        options: {
+            scales: {
+              xAxes: [{
+                type: "time",
+                time: {
+                  unit: 'day',
+                  round: 'day',
+                  displayFormats: {
+                    day: 'MMM D'
+                  }
+                }
+              }],
+              yAxes: [{
+                ticks: {
+                  beginAtZero: true
+                }
+              }]
+            }
+          }
     });
 }
