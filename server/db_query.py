@@ -200,10 +200,17 @@ def add_accountability_partner(username, partner_username):
     if user is None or acc_user is None:
         return None
     else:
-        user_acc_relation = UserAccountabilityPartnerRelation(initiator_user=user, responder_user=acc_user, confirmed=False)
-        session.add(user_acc_relation)
-        session.commit()
-        return True
+        existing_relation = session.query(UserAccountabilityPartnerRelation).filter(
+            ((UserAccountabilityPartnerRelation.initiator_user == user) & (UserAccountabilityPartnerRelation.responder_user == acc_user))
+            | ((UserAccountabilityPartnerRelation.initiator_user == acc_user) & (UserAccountabilityPartnerRelation.responder_user == user))
+        ).first()
+        if existing_relation is None:
+            user_acc_relation = UserAccountabilityPartnerRelation(initiator_user=user, responder_user=acc_user, confirmed=False)
+            session.add(user_acc_relation)
+            session.commit()
+            return True
+        else:
+            return False
 
 def get_other_partner(username, relation):
     if relation.initiator_user.username == username:
