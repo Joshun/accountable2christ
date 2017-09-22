@@ -34,12 +34,14 @@ def register_user(username, password):
     print(user.bcrypt_password)
     session.add(user)
     session.commit()
+    session.close()
 
     return create_user_key(username)
 
 def user_exists(user):
     session = Session()
     user = session.query(User).filter(User.username == user).first()
+    session.close()
     return user is not None
 
 def get_users():
@@ -58,6 +60,7 @@ def get_users():
         users_list.append(user_dict)
 
 
+    session.close()
     return users_list
 
 def get_struggles(username):
@@ -76,9 +79,11 @@ def get_struggles(username):
             struggle_dict = sanitise_dict(s.__dict__)
             struggle_dict["events"] = struggle_events_list
             struggle_list.append(struggle_dict)
+        session.close()
         return struggle_list
 
     else:
+        session.close()
         return None
 
 
@@ -87,8 +92,10 @@ def authenticate_user(username, password):
     user = session.query(User).filter(User.username == username).first()
 
     if user is None or user.bcrypt_password is None:
+        session.close()
         return False
     else:
+        session.close()
         return bcrypt.hashpw(password.encode("utf-8"), user.bcrypt_password.encode("utf-8")) == user.bcrypt_password.encode("utf-8")
 
 def create_user_key(username):
@@ -96,6 +103,7 @@ def create_user_key(username):
     user = session.query(User).filter(User.username == username).first()
 
     if user is None:
+        session.close()
         return None
 
     else:
@@ -106,6 +114,7 @@ def create_user_key(username):
         # user.user_keys.append(user_key)
         session.commit()
 
+        session.close()
         return key
 
 
@@ -123,6 +132,7 @@ def get_user_keys():
         
         users_list.append(user_dict)
     print(users_list)
+    session.close()
     return users_list
 
 def get_user_from_key(key):
@@ -130,8 +140,10 @@ def get_user_from_key(key):
     db_key = session.query(UserKey).filter(UserKey.key == key).first()
     if db_key is not None and db_key.user is not None:
         db_user = db_key.user
+        session.close()
         return db_user.username
     else:
+        session.close()        
         return None
 
 
@@ -140,6 +152,8 @@ def get_user_key(username, key):
     # user = session.query(User).filter((User.username == username) & (User.user_keys.contains(key) )).first()
     # key = session.query(UserKey).filter((UserKey.user.username == username) & (UserKey.key == key)).first()
     key = session.query(UserKey).join(User).filter((User.username == username) & (UserKey.key == key)).first()
+    session.close()
+    
     return key.key if key is not None else None
 
 def add_struggle(username, struggle_name, struggle_description):
@@ -147,11 +161,13 @@ def add_struggle(username, struggle_name, struggle_description):
     struggle_user = session.query(User).filter(User.username == username).first()
 
     if struggle_user is None:
+        session.close()        
         return "err_invalid_user"
     else:
         struggle = Struggle(name=struggle_name, description=struggle_description, user=struggle_user)
         session.add(struggle)
         session.commit()
+        session.close()        
         return "ok"
 
 # def add_struggle_event(username, struggle_id, timestamp, description):
@@ -170,6 +186,7 @@ def add_struggle_event(username, struggle_name, timestamp):
 
     if struggle is None:
         print("struggle invalid")
+        session.close()        
         return "err_invalid_struggle"
 
     formatted_ts = arrow.get(timestamp).datetime
@@ -179,6 +196,9 @@ def add_struggle_event(username, struggle_name, timestamp):
 
     session.add(struggle_event)
     session.commit()
+    session.close()
+    return "ok"
+    
 
 def remove_struggle(username, struggle_name):
     session = Session()
@@ -208,8 +228,10 @@ def add_accountability_partner(username, partner_username):
             user_acc_relation = UserAccountabilityPartnerRelation(initiator_user=user, responder_user=acc_user, confirmed=False)
             session.add(user_acc_relation)
             session.commit()
+            session.close()
             return True
         else:
+            session.close()
             return False
 
 def get_other_partner(username, relation):
@@ -241,11 +263,14 @@ def get_accountability_partners(username):
         (UserAccountabilityPartnerRelation.responder_user == user)
         & (UserAccountabilityPartnerRelation.confirmed == False)).all()
 
-    return {
+    retval = {
         "partners": [{"relation": sanitise_dict(copy(x.__dict__)), "other_partner": get_other_partner(username, x)} for x in partners],
         "pending_partners": [{"relation": sanitise_dict(copy(x.__dict__)), "other_partner": x.responder_user.username} for x in pending_partners],
         "waiting_partners": [{"relation": sanitise_dict(copy(x.__dict__)), "other_partner": x.initiator_user.username} for x in waiting_partners]
     }
+
+    session.close()
+    return retval
 
 def confirm_partner(initiator_username, responder_username):
     print("confirm_partner", initiator_username, responder_username)
@@ -265,12 +290,14 @@ def confirm_partner(initiator_username, responder_username):
 
     if partner_relation is None:
         print("failed")
+        session.close()
         return False
     else:
         print("CONFIRMED1")
         partner_relation.confirmed = True
         session.add(partner_relation)
         session.commit()
+        session.close()
         return True
 
 def get_accountability_partner_data(username, acc_partner_username):
@@ -302,6 +329,7 @@ def get_accountability_partner_data(username, acc_partner_username):
     )
 
     if relation is None:
+        session.close()
         return None
     else:
         # # Security check: prevent unauthorised access
@@ -326,6 +354,8 @@ def get_accountability_partner_data(username, acc_partner_username):
 
             print(res)
             print(struggles_dict)
+
+        session.close()
             
         return {"partner_name": acc_partner.username, "struggles": struggles_dict}
 
