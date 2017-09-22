@@ -1,6 +1,8 @@
 import db_schema
 from db_schema import User, UserKey, Struggle, StruggleEvent, UserAccountabilityPartnerRelation
 # from db_schema import User, UserKey, Struggle, StruggleEvent
+import sqlalchemy
+from sqlalchemy import Date
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.state import InstanceState
 from copy import copy
@@ -304,8 +306,19 @@ def get_accountability_partner_data(username, acc_partner_username):
         for struggle in struggles:
             struggles_dict[struggle.name] = sanitise_dict(copy(struggle.__dict__))
             struggles_dict[struggle.name]["struggle_events"] = []
-            for e in struggle.struggle_events:
-                struggles_dict[struggle.name]["struggle_events"].append(sanitise_dict(copy(e.__dict__)))
+            # for e in struggle.struggle_events:
+            #     struggles_dict[struggle.name]["struggle_events"].append(sanitise_dict(copy(e.__dict__)))
+            
+            # session.query(StruggleEvent).filter(StruggleEvent.struggle == struggle).group_by(sqlalchemy.func.)
+            # res = session.query(sqlalchemy.func.count(StruggleEvent.id)).filter(StruggleEvent.struggle == struggle).group_by(sqlalchemy.func.strftime("%Y-%m-%d", StruggleEvent.timestamp)).all()
+            res = session.query(sqlalchemy.func.count(StruggleEvent.id), sqlalchemy.cast(StruggleEvent.timestamp,Date)).filter(StruggleEvent.struggle == struggle).group_by(sqlalchemy.func.date_format(StruggleEvent.timestamp, "%Y-%m-%d")).all()
+            if res is not None:
+                struggles_dict[struggle.name]["struggle_events"] = res
+            else:
+                struggles_dict[struggle.name]["struggle_events"] = None
+
+            print(res)
+            print(struggles_dict)
             
         return {"partner_name": acc_partner.username, "struggles": struggles_dict}
 

@@ -16,6 +16,8 @@ class MyJSONEncoder(json.JSONEncoder):
     def default(self, o):
         if isinstance(o, datetime.datetime):
             return o.isoformat()
+        elif isinstance(o, datetime.date):
+            return str(o)
 
         return json.JSONEncoder.default(self, o)
 

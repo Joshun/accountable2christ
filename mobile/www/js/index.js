@@ -113,6 +113,8 @@ var app = {
                     // console.log(other_user.other_partner)
                     // console.log(app.session.partners_list);
                     // partner_relation = app.session.partners_list[other_user.other_partner];
+                    app.session.partner_struggles_for_chart = [];
+                    
                     API.viewAccountabilityPartner(other_user.other_partner, app.session.session_key, function(result) {
                         // alert(result);
                         // console.log(result);
@@ -127,7 +129,8 @@ var app = {
                         }
                         app.session.partner_struggles_vm.struggles = struggles;
 
-                        app.session.partner_struggles_for_chart = extractStruggleEvents(result);
+                        // app.session.partner_struggles_for_chart = extractStruggleEvents(result);
+                        app.session.partner_struggles_for_chart = result;
 
                         showViewAccountabilityPartnerScreen(other_user.other_partner);
 
@@ -143,7 +146,7 @@ var app = {
             },
             methods: {
                 plotChart: function(struggle) {
-                    doPlotChart(app.session.partner_struggles_for_chart);
+                    doPlotChart(app.session.partner_struggles_for_chart.struggles[struggle].struggle_events);
                 }
             }
         });
@@ -471,6 +474,8 @@ function extractStruggleEvents(partner_data) {
 }
 
 function doPlotChart(struggle_data_points) {
+    console.log("plot:");
+    console.log(struggle_data_points);
     // var ctx = $("#struggle_freq_chart").getContext("2d");
     var ctx = document.getElementById("struggle_freq_chart").getContext("2d");
     var myChart = new Chart(ctx, {
