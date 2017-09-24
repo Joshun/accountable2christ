@@ -67,3 +67,9 @@
 .table > tbody > tr > td {
     vertical-align: middle;
 }
+
+.absolute-element {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+}
