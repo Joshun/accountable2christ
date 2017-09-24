@@ -346,7 +346,9 @@ def get_accountability_partner_data(username, acc_partner_username):
             
             # session.query(StruggleEvent).filter(StruggleEvent.struggle == struggle).group_by(sqlalchemy.func.)
             # res = session.query(sqlalchemy.func.count(StruggleEvent.id)).filter(StruggleEvent.struggle == struggle).group_by(sqlalchemy.func.strftime("%Y-%m-%d", StruggleEvent.timestamp)).all()
-            res = session.query(sqlalchemy.func.count(StruggleEvent.id), sqlalchemy.cast(StruggleEvent.timestamp,Date)).filter(StruggleEvent.struggle == struggle).group_by(sqlalchemy.func.date_format(StruggleEvent.timestamp, "%Y-%m-%d")).all()
+
+            # res = session.query(sqlalchemy.func.count(StruggleEvent.id), sqlalchemy.cast(StruggleEvent.timestamp,Date)).filter(StruggleEvent.struggle == struggle).group_by(sqlalchemy.func.date_format(StruggleEvent.timestamp, "%Y-%m-%d")).all()
+            res = session.query(sqlalchemy.func.count(StruggleEvent.id), sqlalchemy.func.date_format(StruggleEvent.timestamp, "%Y-%m-%d %H:00:00")).filter(StruggleEvent.struggle == struggle).group_by(sqlalchemy.func.date_format(StruggleEvent.timestamp, "%Y-%m-%d")).all()
             if res is not None:
                 struggles_dict[struggle.name]["struggle_events"] = res
             else:

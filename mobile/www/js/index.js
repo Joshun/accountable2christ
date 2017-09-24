@@ -499,7 +499,7 @@ function doPlotChart(struggle_data_points, struggle_name) {
     var ctx = document.getElementById("struggle_freq_chart").getContext("2d");
     console.log(split_points.counts);
     var myChart = new Chart(ctx, {
-        type: 'bar',
+        type: 'line',
         // datasets: struggle_data_points
         data: {
             labels: split_points.dates,
@@ -515,10 +515,11 @@ function doPlotChart(struggle_data_points, struggle_name) {
               xAxes: [{
                 type: "time",
                 time: {
-                  unit: 'day',
-                  round: 'day',
+                  unit: 'hour',
+                  round: 'hour',
                   displayFormats: {
-                    day: 'MMM D'
+                    // day: 'MMM D'
+                    hour: 'MMM D HH:00'
                   }
                 }
               }],
