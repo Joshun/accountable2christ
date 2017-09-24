@@ -97,7 +97,6 @@ var app = {
             },
             methods: {
                 view: function(other_user) {
-                    alert("View " + other_user.other_partner);
                     // console.log(other_user.relation)
                     console.log("usersssss")
                     // console.log(other_user.other_partner.toString())
