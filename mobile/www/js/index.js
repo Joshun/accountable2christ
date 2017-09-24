@@ -41,6 +41,9 @@ var app = {
     onDeviceReady: function() {
         console.log("init.");
 
+        window.resolveLocalFileSystemURL(cordova.file.applicationDirectory + "www/pages.md", gotFile, fail);
+        
+
         app.session.vm = new Vue({
             el: "#struggles_table_body",
             data: {
@@ -259,6 +262,14 @@ var app = {
             return false;
         });
 
+        $("#show_pages_screen_btn").on("click", function() {
+            showViewPagesScreen();
+        })
+
+        $("#viewer_back_btn").on("click", function() {
+            showMainScreen();
+        })
+
         $("#cancel_add_new_struggle_btn").on("click", function() {
             showMainScreen();
         });
@@ -286,6 +297,10 @@ var app = {
         $("#view_partner_back").on("click", function() {
             showMainScreen();
         })
+
+        $("#viewer_back_btn").on("click", function() {
+            showMainScreen();
+        });
 
         $("#add_new_acc_partner_scn").on("click", function() {
             showAddAccountabilityPartnerScreen();
@@ -326,10 +341,16 @@ function hideAll() {
     $("#manage_struggles_screen").addClass("hidden");
     $("#add_accountability_partner_screen").addClass("hidden");
     $("#view_accountability_partner_screen").addClass("hidden");
+    $("#view_pages_screen").addClass("hidden");
 }
 
 function login(api_result) {
     
+}
+
+function showViewPagesScreen() {
+    hideAll();
+    $("#view_pages_screen").removeClass("hidden");
 }
 
 function showLoginScreen() {
@@ -532,4 +553,27 @@ function doPlotChart(struggle_data_points, struggle_name) {
           }
     });
     app.session.struggles_chart = myChart;
+}
+
+function gotFile(fileEntry) {
+    fileEntry.file(function(file) {
+        var reader = new FileReader();
+
+        reader.onloadend = function(e) {
+            // console.log("Text is: "+this.result);
+            console.log("File loaded.");
+            // document.querySelector("#textArea").innerHTML = this.result;
+            var converter = new showdown.Converter();
+            var html = converter.makeHtml(this.result);
+            // document.write(html);
+            $("#viewer_container").html(html);
+        }
+
+        reader.readAsText(file);
+    });
+}
+
+function fail(e) {
+    console.log("FileSystem Error");
+    console.dir(e);
 }
