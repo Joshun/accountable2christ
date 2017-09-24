@@ -540,7 +540,8 @@ function doPlotChart(struggle_data_points, struggle_name) {
                   round: 'hour',
                   displayFormats: {
                     // day: 'MMM D'
-                    hour: 'MMM D HH:00'
+                    // hour: 'MMM D HH:00'
+                    hour: 'DD/MM HH:00'
                   }
                 }
               }],
