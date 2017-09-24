@@ -24,7 +24,8 @@ var app = {
         "username": null,
         "session_key": null,
         "vm": null,
-        "struggle_list": null
+        "struggle_list": null,
+        "struggles_chart": null
     },
 
 
@@ -337,6 +338,10 @@ function showLoginScreen() {
 }
 
 function showViewAccountabilityPartnerScreen(partner_name) {
+    if (app.session.struggles_chart != null) {
+        app.session.struggles_chart.destroy();
+    }
+
     hideAll();
     $("#partner_name_heading").text(partner_name);
     $("#view_accountability_partner_screen").removeClass("hidden");
@@ -525,4 +530,5 @@ function doPlotChart(struggle_data_points, struggle_name) {
             }
           }
     });
+    app.session.struggles_chart = myChart;
 }
