@@ -361,6 +361,9 @@ function showViewPagesScreen() {
 }
 
 function showLoginScreen() {
+    $("#login_password").val("");
+    $("#login_password_confirm").val("");
+    $("#login_user").val("");
     hideAll();
     $("#login_screen").removeClass("hidden");
 }
