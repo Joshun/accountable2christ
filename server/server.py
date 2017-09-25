@@ -145,10 +145,15 @@ class GetStrugglesHandler(AuthHandler):
             struggles_name_desc_dict = {}
             for s in struggle_list:
                 struggles_name_desc_dict[s["name"]] = s["description"]
+
+            json_dict = { "result": "successful", "struggles": struggles_name_desc_dict }
             
-            self.write(struggles_name_desc_dict);
+            # self.write(struggles_name_desc_dict);
         else:
-            self.write("ERR")
+            json_dict = {"result": "failure"}
+            # self.write("ERR")
+        
+        self.write(json_dict)
 
 class AddAccountabilityPartnerHandler(AuthHandler):
     @gen.coroutine

@@ -376,14 +376,18 @@ function showMainScreen() {
     $("#user_header").text("Welcome, " + app.session.username);
 
     API.loadStruggles(app.session.session_key, function(res) {
-        console.log("loadStruggles:", res)
-        // app.session.struggle_list.setList(res);
-        app.session.struggle_list.clearAll();
-        for (var k in res) {
-            app.session.struggle_list.add(k, res[k]);
+        if (res["result"] == "failure") {
+            alert("failed to load struggles!");
         }
-
-     
+        else {
+            console.log("loadStruggles:", res)
+            // app.session.struggle_list.setList(res);
+            app.session.struggle_list.clearAll();
+            for (var k in res.struggles) {
+                app.session.struggle_list.add(k, res.struggles[k]);
+            }
+        }
+       
 
         hideAll();        
         $("#main_screen").removeClass("hidden");
