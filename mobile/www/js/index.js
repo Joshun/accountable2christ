@@ -124,19 +124,26 @@ var app = {
                         // console.log(result);
                         // alert(extractStruggleEvents(result));
                         console.log("result::")
-                        console.log(extractStruggleEvents(result));
-                        // app.session.partner_struggles_vm = [];
-                        var struggles = [];
-                        for (k in result.struggles) {
-                            struggles.push(k);
+                        console.log(result)
+                        // console.log(extractStruggleEvents(result.partner_data));
+
+                        if (result["result"] == "failure") {
+                            alert("view partner failed!");
                         }
-                        app.session.partner_struggles_vm.struggles = struggles;
+                        else {
+                            // app.session.partner_struggles_vm = [];
+                            var struggles = [];
+                            for (k in result.partner_data.struggles) {
+                                struggles.push(k);
+                            }
+                            app.session.partner_struggles_vm.struggles = struggles;
 
-                        // app.session.partner_struggles_for_chart = extractStruggleEvents(result);
-                        app.session.partner_struggles_for_chart = result;
+                            // app.session.partner_struggles_for_chart = extractStruggleEvents(result);
+                            app.session.partner_struggles_for_chart = result.partner_data;
 
-                        showViewAccountabilityPartnerScreen(other_user.other_partner);
+                            showViewAccountabilityPartnerScreen(other_user.other_partner);
 
+                            }
                     });
                 }
             }

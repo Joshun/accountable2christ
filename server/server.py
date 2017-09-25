@@ -160,10 +160,10 @@ class AddAccountabilityPartnerHandler(AuthHandler):
     def post(self):
         self.auth()
         if self.auth_user is None:
-            self.write("ERR")
+            self.write({"result": "failure"})
         accountability_partner = self.get_body_argument("accountability_partner_username", default=None)
         if accountability_partner is None:
-            self.write("ERR")
+            self.write({"result": "failure"})
         else:
             res = db_query.add_accountability_partner(self.auth_user, accountability_partner)
 
@@ -178,7 +178,7 @@ class GetAccountabilityPartnersHandler(AuthHandler):
         if res is not None:
             self.write(res)
         else:
-            self.write("ERR")
+            self.write({"result": "failure"})
     
         self.finish()
 
@@ -196,15 +196,16 @@ class ViewAccountabilityPartnerHandler(AuthHandler):
 
 
         if acc_partner_username is None:
-            self.write("ERR")
+            self.write({"result": "failure"})
         else:
             res = db_query.get_accountability_partner_data(self.auth_user, acc_partner_username)
             if res is None:
-                self.write("ERR")
+                self.write({"result": "failure"})
             else:
                 # self.write(json.dumps({"result": res}, cls=MyJSONEncoder))
-                print(type(res))
-                self.write(json.dumps(res, cls=MyJSONEncoder))
+                # print(type(res))
+                json_dict = {"result": "successful", "partner_data": res}
+                self.write(json.dumps(json_dict, cls=MyJSONEncoder))
         self.finish()
 
 class ConfirmAccountabilityPartnerHandler(AuthHandler):
