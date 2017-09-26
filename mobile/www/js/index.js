@@ -97,7 +97,8 @@ var app = {
         app.session.acc_partners_vm = new Vue({
             el: "#acc_partners_table",
             "data": {
-                partners: []
+                partners: [],
+                pending_partners: []
             },
             methods: {
                 view: function(other_user) {
@@ -145,6 +146,9 @@ var app = {
 
                             }
                     });
+                },
+                tryViewPending: function() {
+                    alert("This partner has not accepted your request yet.");
                 }
             }
         });
@@ -156,7 +160,10 @@ var app = {
             },
             methods: {
                 plotChart: function(struggle) {
-                    doPlotChart(app.session.partner_struggles_for_chart.struggles[struggle].struggle_events, struggle);
+                    doPlotChart(app.session.partner_struggles_for_chart.struggles[struggle].struggle_events,
+                        struggle,
+                        app.session.partner_struggles_for_chart.struggles[struggle].description
+                    );
                 }
             }
         });
@@ -372,6 +379,8 @@ function showViewAccountabilityPartnerScreen(partner_name) {
     if (app.session.struggles_chart != null) {
         app.session.struggles_chart.destroy();
     }
+    $("#struggle_desc_header").addClass("hidden");
+    $("#struggle_desc").text("");
 
     hideAll();
     $("#partner_name_heading").text(partner_name);
@@ -410,6 +419,7 @@ function showMainScreen() {
         API.loadAccountabilityPartners(app.session.session_key, function(res) {
             app.session.waiting_partners_vm.waiting_partners = res["waiting_partners"];
             app.session.acc_partners_vm.partners = res["partners"];
+            app.session.acc_partners_vm.pending_partners = res["pending_partners"];
             for (var partner in res["partners"]) {
                 app.session.partners_list[partner.partner_name] = partner;
             }
@@ -525,7 +535,14 @@ function splitDataPoints(struggle_data_points) {
     return retval;
 }
 
-function doPlotChart(struggle_data_points, struggle_name) {
+function doPlotChart(struggle_data_points, struggle_name, struggle_description) {
+    $("#struggle_desc_header").removeClass("hidden");
+    if (struggle_description.length > 0) {
+        $("#struggle_desc").text(struggle_description);
+    }
+    else {
+        $("#struggle_desc").text("Nothing to show.");
+    }
     console.log("plot:");
     console.log(struggle_data_points);
     console.log(splitDataPoints(struggle_data_points));

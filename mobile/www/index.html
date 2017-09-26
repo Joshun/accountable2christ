@@ -86,9 +86,10 @@
                 </div>
             </div>
 
-            <div class="row">
+            <div class="row" id="struggles_table">
                 <div class="col-xs-12">
-                    <table class="table table-striped" id="struggles_table">
+                    <p v-if="struggles.length == 0">No struggles added.</p>
+                    <table class="table table-striped">
                         <thead>
                             <th class="icon-cell"></th>
                             <th class="desc-cell"></th>
@@ -113,10 +114,10 @@
                 <div class="col-xs-12">
                     <div class="btn-group-justified" role="group">
                         <div class="btn-group" role="group">
-                            <button class="btn btn-primary" id="add_new_struggle_scn_btn">ADD NEW</button>
+                            <button class="btn" id="add_new_struggle_scn_btn">ADD</button>
                         </div>
                         <div class="btn-group" role="group">
-                            <button class="btn btn-primary" id="manage_struggles_scn_btn">MANAGE</button>
+                            <button class="btn" id="manage_struggles_scn_btn">MANAGE</button>
                         </div>
                     </div>
                 </div>
@@ -126,68 +127,80 @@
                 <div class="col-xs-12">
                     <div class="btn-group-justified">
                         <div class="btn-group">
-                            <button id="show_pages_screen_btn" class="btn btn-primary">BIBLE VERSES</button>
+                            <button id="show_pages_screen_btn" class="btn">BIBLE VERSES</button>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="row">
-                <div class="col-xs-12">
-                    <h2>I am helping...</h2>
-                </div>
-            </div>
+            <div id="acc_partners_table">
 
-            <div class="row">
-                <div class="col-xs-12">
-                    <table class="table table-striped" id="acc_partners_table">
-                        <thead>
-                            <th></th>
-                            <!-- <th></th> -->
-                        </thead>
-                        <tbody>
-                            <tr v-for="partner in partners" v-on:click="view(partner)">
-                                <td>{{ partner.other_partner }}</td>
-                                <!-- <td>joe@live.com</td>
-                                <td>Joe Bloggs</td> -->
-                            </tr>
-                        </tbody>
-                    </table>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <h2>I am helping...</h2>
+                    </div>
                 </div>
-            </div>
 
-            <div class="row">
-                <div class="col-xs-12">
-                    <h2>Requests</h2>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-xs-12">
-                    <table class="table table-striped" id="waiting_partners_table">
-                        <thead>
-                            <th></th>
-                            <th></th>
-                        </thead>
-                        <tbody>
-                            <tr v-for="w_partner in waiting_partners">
-                                <td>{{ w_partner.other_partner}}</td>
-                                <td><button class="btn pull-right" type="button" v-on:click="confirm(w_partner.other_partner)">Confirm</button></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-xs-12">
-                    <div class="btn-group-justified" role="group">
-                        <div class="btn-group" role="group">
-                            <button class="btn btn-primary" id="add_new_acc_partner_scn">ADD NEW</button>
-                        </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <p v-if="partners.length == 0 && pending_partners.length == 0">No partners added.</p>
+                        <table class="table table-striped">
+                            <thead>
+                                <th></th>
+                                <!-- <th></th> -->
+                            </thead>
+                            <tbody>
+                                <tr v-for="partner in partners" v-on:click="view(partner)">
+                                    <td>{{ partner.other_partner }}</td>
+                                    <!-- <td>joe@live.com</td>
+                                    <td>Joe Bloggs</td> -->
+                                </tr>
+                                <tr v-for="partner in pending_partners" v-on:click="tryViewPending()">
+                                    <td class="pending_partner">{{ partner.other_partner }} <span class="right-align">(pending)</span> </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
+            <div class="row">
+                    <div class="col-xs-12">
+                        <div class="btn-group-justified" role="group">
+                            <div class="btn-group" role="group">
+                                <button class="btn" id="add_new_acc_partner_scn">ADD</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            <div id="waiting_partners_table">
+
+                <div class="row">
+                    <div class="col-xs-12">
+                        <h2>Requests</h2>
+                        <p v-if="waiting_partners.length == 0">No new requests.</p>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-12">
+                        <table class="table table-striped">
+                            <thead>
+                                <th></th>
+                                <th></th>
+                            </thead>
+                            <tbody>
+                                <tr v-for="w_partner in waiting_partners">
+                                    <td>{{ w_partner.other_partner}}</td>
+                                    <td><button class="btn pull-right" type="button" v-on:click="confirm(w_partner.other_partner)">Confirm</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                
+            </div> 
 
             <div class="row">
                 <div class="col-xs-12">
@@ -221,10 +234,10 @@
                     <div class="col-xs-12">
                         <div class="btn-group-justified" role="group">
                             <div class="btn-group" role="group">
-                                <input class="btn btn-primary" type="submit" value="ADD" id="add_new_struggle_btn">
+                                <input class="btn" type="submit" value="ADD" id="add_new_struggle_btn">
                             </div>
                              <div class="btn-group" role="group">
-                                <button class="btn btn-primary" type="button" id="cancel_add_new_struggle_btn">CANCEL</button>
+                                <button class="btn" type="button" id="cancel_add_new_struggle_btn">CANCEL</button>
                             </div>
                         </div>
                     </div>
@@ -235,8 +248,9 @@
         <div id="manage_struggles_screen" class="hidden">
             <div class="row">
                 <div class="col-xs-12">
+                    <h2>Delete struggle</h2>
                     <div class="dropdown">
-                        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Select...
+                        <button class="btn dropdown-toggle" type="button" data-toggle="dropdown">Select...
                         <span class="caret"></span></button>
                         <ul class="dropdown-menu" id="manage_struggles_dropdown">
                             <li v-for="struggle in struggles" v-on:click="onClick(struggle.name)">
@@ -250,7 +264,7 @@
                 <div class="col-xs-12">
                     <div class="btn-group-justified">
                         <div class="btn-group">
-                            <button class="btn btn-primary" id="manage_struggles_back">BACK</button>
+                            <button class="btn" id="manage_struggles_back">BACK</button>
                         </div>
                     </div>
                 </div>
@@ -260,16 +274,24 @@
         <div id="add_accountability_partner_screen" class="hidden">
             <div class="row">
                 <div class="col-xs-12">
+                    <h2>Add accountability partner</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
                     <form id="add_accountability_partner_form">
-                        <input class="form-control" id="add_acc_partner_username" type="text" placeholder="Moses">
-                        <div class="btn-group-justified">
+                        <input class="form-control" id="add_acc_partner_username" type="text" placeholder="John Smith">
+                        <!-- <div class="btn-group-justified">
                             <div class="btn-group">
-                                <input class="btn btn-primary" type="submit" value="SEND REQUEST">
                             </div>
-                        </div>
+                        </div> -->
+                       
                         <div class="btn-group-justified">
                             <div class="btn-group">
-                                <button id="add_acc_partner_back" class="btn btn-primary" type="button">BACK</button>
+                                <input class="btn" type="submit" value="SEND REQUEST">                                
+                            </div>
+                            <div class="btn-group">
+                                <button id="add_acc_partner_back" class="btn" type="button">CANCEL</button>
                             </div>
                         </div>
                     </form>
@@ -324,6 +346,12 @@
             <div class="row">
                 <div class="col-xs-12">
                     <canvas id="struggle_freq_chart" width="240" height="240"></canvas>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <h3 id="struggle_desc_header" class="hidden">Additional information</h3>
+                    <p id="struggle_desc"></p>
                 </div>
             </div>
             <div class="row">

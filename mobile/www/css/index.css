@@ -58,6 +58,7 @@
 
 .right-align {
     text-align: right;
+    float: right;
 }
 
 #logout_btn {
@@ -72,4 +73,17 @@
     position: fixed;
     top: 0px;
     left: 0px;
+}
+
+.btn {
+    margin: 5px 20px 5px 20px;
+}
+
+.btn-group {
+    padding-left: 2px;
+    padding-right: 2px;
+}
+
+.pending_partner {
+    color: grey;
 }
