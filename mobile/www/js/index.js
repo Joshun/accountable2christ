@@ -45,7 +45,7 @@ var app = {
         
 
         app.session.vm = new Vue({
-            el: "#struggles_table_body",
+            el: "#struggles_table",
             data: {
                 struggles: []
             },

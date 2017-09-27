@@ -95,12 +95,6 @@
                             <th class="desc-cell"></th>
                         </thead>
                         <tbody id="struggles_table_body">
-                            <!--<template id="struggles_table_body" v-for="struggle in struggles">
-                                <tr>
-                                    <td class="icon-cell">{{ struggle.icon }}</td>
-                                    <td class="desc-cell">{{ struggle.description }}</td>
-                                </tr>
-                            </template>-->
                             <tr v-for="struggle in struggles" v-on:click="onClick(struggle.name)">
                                 <td class="icon-cell" v-html="struggle.icon"></td>
                                 <td class="desc-cell">{{ struggle.name }}</td>
