@@ -280,39 +280,15 @@ var app = {
             showViewPagesScreen();
         })
 
-        $("#viewer_back_btn").on("click", function() {
+        $(".back_to_main_scn_btn").on("click", function() {
             showMainScreen();
         })
-
-        $("#cancel_add_new_struggle_btn").on("click", function() {
-            showMainScreen();
-        });
-
-        $("#send-struggle-yes").on("click", function() {
-            showMainScreen();
-        });
-
-        $("#send-struggle-no").on("click", function() {
-            showMainScreen();
-        });
 
         $("#manage_struggles_scn_btn").on("click", function() {
             showManageStrugglesScreen();
         });
 
         $("#manage_struggles_back").on("click", function() {
-            showMainScreen();
-        });
-
-        $("#add_acc_partner_back").on("click", function() {
-            showMainScreen();
-        });
-
-        $("#view_partner_back").on("click", function() {
-            showMainScreen();
-        })
-
-        $("#viewer_back_btn").on("click", function() {
             showMainScreen();
         });
 
