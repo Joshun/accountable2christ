@@ -87,3 +87,7 @@
 .pending_partner {
     color: grey;
 }
+
+#viewer_container {
+    margin-left: 10px;
+}
