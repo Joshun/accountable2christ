@@ -361,6 +361,8 @@ function login(api_result) {
 function showViewPagesScreen() {
     hideAll();
     $("#view_pages_screen").removeClass("hidden");
+    $("#view_pages_screen").hide();
+    $("#view_pages_screen").fadeIn("fast");
 }
 
 function showSettingsScreen() {
@@ -385,6 +387,8 @@ function showSettingsScreen() {
     });
 
     $("#settings_screen").removeClass("hidden");
+    $("#settings_screen").hide();
+    $("#settings_screen").fadeIn("fast");
 }
 
 function showLoginScreen() {
@@ -405,6 +409,8 @@ function showViewAccountabilityPartnerScreen(partner_name) {
     hideAll();
     $("#partner_name_heading").text(partner_name);
     $("#view_accountability_partner_screen").removeClass("hidden");
+    $("#view_accountability_partner_screen").hide();
+    $("#view_accountability_partner_screen").fadeIn("fast");
 }
 
 function showMainScreen() {
@@ -430,6 +436,8 @@ function showMainScreen() {
 
         hideAll();        
         $("#main_screen").removeClass("hidden");
+        $("#main_screen").hide();
+        $("#main_screen").fadeIn("fast");
 
         // $("td").on("click", function() {
         //     alert("clicked!");
@@ -489,11 +497,15 @@ function loginFailed() {
 function showAddStruggleScreen() {
     hideAll();
     $("#add_new_struggle_screen").removeClass("hidden");
+    $("#add_new_struggle_screen").hide();
+    $("#add_new_struggle_screen").fadeIn("fast");    
 }
 
 function showManageStrugglesScreen() {
     hideAll();
     $("#manage_struggles_screen").removeClass("hidden");
+    $("#manage_struggles_screen").hide();
+    $("#manage_struggles_screen").fadeIn("fast");
 }
 
 function showSendStruggleScreen() {
@@ -504,6 +516,8 @@ function showSendStruggleScreen() {
 function showAddAccountabilityPartnerScreen() {
     hideAll();
     $("#add_accountability_partner_screen").removeClass("hidden");
+    $("#add_accountability_partner_screen").hide();
+    $("#add_accountability_partner_screen").fadeIn("fast");
 }
 
 function writeError(msg) {
