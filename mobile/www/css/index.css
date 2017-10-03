@@ -17,6 +17,10 @@
     border-bottom: none;
 }*/
 
+body {
+    font-size: 11pt;
+}
+
 #struggles_table .icon-cell {
     width: 25%;
     line-height: 40px;
@@ -90,4 +94,15 @@
 
 #viewer_container {
     margin-left: 10px;
+}
+
+@keyframes loadingAnimation {
+    0%   { opacity:1; }
+    50%  { opacity:0; }
+    100% { opacity:1; }
+}
+
+#loading_screen {
+    font-size: 1.5em;
+    animation: loadingAnimation 1s infinite;
 }
