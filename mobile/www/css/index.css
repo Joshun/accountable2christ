@@ -105,4 +105,9 @@ body {
 #loading_screen {
     font-size: 1.5em;
     animation: loadingAnimation 1s infinite;
+    /* height: 500px; */
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
