@@ -170,6 +170,20 @@ var app = {
 
         app.session.partner_struggles_for_chart = {};
 
+        app.session.settings = {
+            "chart_type": "bar",
+            "chart_period": "daily",
+            "chart_frontend": "chartjs"
+        }
+
+        for (k in app.session.settings) {
+            var dbVal = localStorage.getItem(k);
+            if (dbVal != null) {
+                console.log("Loaded", k, "=", dbVal, "from db");
+                app.session.settings[k] = dbVal;
+            }
+        }
+
         // $.ajax({
         //     "url": "http://10.0.2.2:8000/register",
         //     "data": {
@@ -296,6 +310,10 @@ var app = {
             showAddAccountabilityPartnerScreen();
         });
 
+        $("#settings_btn").on("click", function() {
+            showSettingsScreen();
+        });
+
         // $("table tr").on("click", function() {
         //     showSendStruggleScreen();
         // });
@@ -324,6 +342,7 @@ app.initialize();
 
 function hideAll() {
     clearError();
+    $("#loading_screen").addClass("hidden");
     $("#login_screen").addClass("hidden");
     $("#main_screen").addClass("hidden");
     $("#add_new_struggle_screen").addClass("hidden");
@@ -332,6 +351,7 @@ function hideAll() {
     $("#add_accountability_partner_screen").addClass("hidden");
     $("#view_accountability_partner_screen").addClass("hidden");
     $("#view_pages_screen").addClass("hidden");
+    $("#settings_screen").addClass("hidden");
 }
 
 function login(api_result) {
@@ -341,6 +361,30 @@ function login(api_result) {
 function showViewPagesScreen() {
     hideAll();
     $("#view_pages_screen").removeClass("hidden");
+}
+
+function showSettingsScreen() {
+    hideAll();
+
+    console.log(app.session.settings);
+    
+    $("#chart_type_dropdown option").each(function() {
+        this.selected = (this.text == app.session.settings.chart_type);
+    });
+
+    $("#chart_type_dropdown").on("change", function() {
+        var optVal = $("#chart_type_dropdown option:selected").val();
+        app.session.settings.chart_type = optVal;
+        localStorage.setItem("chart_type", optVal);
+    });
+
+    $("#chart_period_dropdown").on("change", function() {
+        var optVal = $("#chart_period_dropdown option:selected").val();
+        app.session.settings.chart_period = optVal;
+        localStorage.setItem("chart_period", optVal);
+    });
+
+    $("#settings_screen").removeClass("hidden");
 }
 
 function showLoginScreen() {
@@ -527,7 +571,8 @@ function doPlotChart(struggle_data_points, struggle_name, struggle_description) 
     var ctx = document.getElementById("struggle_freq_chart").getContext("2d");
     console.log(split_points.counts);
     var myChart = new Chart(ctx, {
-        type: 'line',
+        // type: 'line',
+        type: app.session.settings.chart_type,
         // datasets: struggle_data_points
         data: {
             labels: split_points.dates,
@@ -543,13 +588,16 @@ function doPlotChart(struggle_data_points, struggle_name, struggle_description) 
               xAxes: [{
                 type: "time",
                 time: {
-                  unit: 'hour',
-                  round: 'hour',
-                  displayFormats: {
-                    // day: 'MMM D'
-                    // hour: 'MMM D HH:00'
-                    hour: 'DD/MM HH:00 '
-                  }
+                //   unit: 'hour' ,
+                unit: (app.session.settings.chart_period == "daily") ? 'day' : 'hour',
+                // unit: 'day',
+                //   round: 'hour',
+                  displayFormats : (app.session.settings.chart_period == "daily") ? { day: 'MMM D' } :  { hour: 'MMM D HH:00' }
+                //   displayFormats: {
+                //     // day: 'MMM D'
+                //     hour: 'MMM D HH:00'
+                //     // hour: 'DD/MM HH:00 '
+                //   }
                 }
               }],
               yAxes: [{

@@ -33,7 +33,10 @@
         <title>Accountable2Christ</title>
     </head>
     <body class="container">
-        <div id="login_screen">
+        <div id="loading_screen">
+            <p>Loading...</p>
+        </div>
+        <div id="login_screen" class="hidden">
             <div class="row">
                 <div class="col-xs-12">
                     <h1>Login</h1>
@@ -221,7 +224,7 @@
             <form action="" id="add_new_struggle_form">
                 <div class="row">
                     <div class="col-xs-12">
-                        <h1>Add new struggle...</h1>
+                        <h2>Add new struggle...</h2>
                     </div>
                 </div>
                 <div class="row">
@@ -377,6 +380,35 @@
                     <div id="viewer_container"></div>
                 </div>
                 <div class="col-xs-2"></div>
+            </div>
+        </div>
+
+        <div id="settings_screen" class="hidden">
+            <div class="row">
+                <div class="col-xs-12">
+                    <h2>Settings</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="form-group">
+                        <label for="chart_type_dropdown">Chart type:</label>
+                        <select class="form-control" id="chart_type_dropdown">
+                            <option>line</option>
+                            <option>bar</option>
+                        </select>
+                        <label for="chart_period_dropdown">Chart period:</label>
+                        <select class="form-control" id="chart_period_dropdown">
+                            <option>daily</option>
+                            <option>hourly</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <button type="button" class="btn back_to_main_scn_btn">Back</button>
+                </div>
             </div>
         </div>
 
