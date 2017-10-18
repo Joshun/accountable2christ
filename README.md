@@ -15,6 +15,6 @@ Component|Language / framework
 ---|---
 Mobile App | [Cordova](https://cordova.apache.org/)
 Web App | Custom client-side JS ?
-Web Server | [Node.js](https://node.js)
-DBMS | MariaDB / PostgreSQL
+Web Server | [Tornado](http://www.tornadoweb.org/)
+DBMS | [MariaDB (MySQL)](https://mariadb.org/)
 Email Server (SMTP) | ?
