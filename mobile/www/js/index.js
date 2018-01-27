@@ -333,6 +333,10 @@ var app = {
         else {
             showLoginScreen();
         }
+        
+        $(function() {
+            FastClick.attach(document.body);
+        });
     
 
     }
