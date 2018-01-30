@@ -4,9 +4,12 @@ function API() {
 };
 
 // API.host = "10.0.2.2";
+// API.port = "8000";
+// API.url = "https://" + API.host + ":" + API.port;
+
+// use https (requires nginx setup)
 API.host = "app.jmoey.com";
-API.port = "8000";
-API.url = "http://" + API.host + ":" + API.port;
+API.url = "https://" + API.host;
 console.log(API.url);
 
 API.register = function(username, password, callback) {
